@@ -245,6 +245,36 @@ input:focus, select:focus, textarea:focus{
   cursor:pointer;
 }
 
+/* Modal (Level Up Wizard) */
+dialog.modal{
+  border:0;
+  padding:0;
+  background:transparent;
+  width:min(960px, calc(100% - 24px));
+}
+dialog.modal::backdrop{
+  background:rgba(0,0,0,0.7);
+}
+.modal-card{
+  background:var(--card);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:14px;
+  padding:14px;
+  max-height:calc(100vh - 64px);
+  overflow:auto;
+}
+.modal-hdr{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+}
+.modal-title{font-size:18px;font-weight:800;}
+.modal-footer{display:flex;align-items:center;gap:10px;}
+.modal-footer .spacer{flex:1;}
+.wiz-err{color:#ffb4b4;}
+.wiz-ok{color:#b7ffcf;}
+
 .feature-list{
   display:flex;
   flex-direction: column;

@@ -84,10 +84,53 @@ export const SPELLS_KNOWN_TABLE = {
 
 export const CANTRIPS_KNOWN_TABLE = {
   Bard:    [0,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4],
+  Cleric:  [0,3,3,3,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5],
+  Druid:   [0,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4],
   Sorcerer:[0,4,4,4,5,5,5,5,5,5,6,6,6,6,6,6,6,6,6,6,6],
   Warlock: [0,2,2,2,3,3,3,3,3,3,4,4,4,4,4,4,4,4,4,4,4],
+  Wizard:  [0,3,3,3,4,4,4,4,4,4,5,5,5,5,5,5,5,5,5,5,5],
   // Ranger has no cantrips in SRD 2014
 };
+
+// Eldritch Knight and Arcane Trickster use the same spells-known progression.
+// Source table reproduced (counts) from the 2014 PHB / SRD-style class tables.
+export const THIRD_CASTER_SPELLS_KNOWN_TABLE = [
+  0, // 0
+  0, // 1
+  0, // 2
+  3, // 3
+  4, // 4
+  4, // 5
+  4, // 6
+  5, // 7
+  6, // 8
+  6, // 9
+  7, // 10
+  8, // 11
+  8, // 12
+  9, // 13
+  10,// 14
+  10,// 15
+  11,// 16
+  11,// 17
+  11,// 18
+  12,// 19
+  13,// 20
+];
+
+export const ELDRITCH_KNIGHT_CANTRIPS_TABLE = [
+  0,0,0,
+  2,2,2,2,2,2,2,
+  3,3,3,3,3,3,3,3,3,3,3,
+];
+
+// Arcane Trickster always has Mage Hand, plus 2 cantrips (levels 3-9), then +3 (levels 10+).
+// This table counts total cantrips known, including Mage Hand.
+export const ARCANE_TRICKSTER_CANTRIPS_TABLE = [
+  0,0,0,
+  3,3,3,3,3,3,3,
+  4,4,4,4,4,4,4,4,4,4,4,
+];
 
 export const WARLOCK_PACT_TABLE = {
   slotLevel: [0,1,1,2,2,3,3,4,4,5,5,5,5,5,5,5,5,5,5,5,5],
@@ -104,17 +147,36 @@ export const MYSTIC_ARCANUM_BY_LEVEL = {
   17: 9,
 };
 
-export function spellsKnownLimit(className, classLevel){
+export function spellsKnownLimit(className, classLevel, subclassName){
   const name = (className||"").trim();
+  const sub = (subclassName||"").trim();
   const lv = clampInt(classLevel, 0, 20);
+
+  // Subclass-dependent known casters.
+  if (name==="Fighter" && sub==="Eldritch Knight"){
+    return THIRD_CASTER_SPELLS_KNOWN_TABLE[lv] ?? 0;
+  }
+  if (name==="Rogue" && sub==="Arcane Trickster"){
+    return THIRD_CASTER_SPELLS_KNOWN_TABLE[lv] ?? 0;
+  }
+
   const table = SPELLS_KNOWN_TABLE[name];
   if (!table) return null;
   return table[lv] ?? null;
 }
 
-export function cantripsKnownLimit(className, classLevel){
+export function cantripsKnownLimit(className, classLevel, subclassName){
   const name = (className||"").trim();
+  const sub = (subclassName||"").trim();
   const lv = clampInt(classLevel, 0, 20);
+
+  if (name==="Fighter" && sub==="Eldritch Knight"){
+    return ELDRITCH_KNIGHT_CANTRIPS_TABLE[lv] ?? 0;
+  }
+  if (name==="Rogue" && sub==="Arcane Trickster"){
+    return ARCANE_TRICKSTER_CANTRIPS_TABLE[lv] ?? 0;
+  }
+
   const table = CANTRIPS_KNOWN_TABLE[name];
   if (!table) return null;
   return table[lv] ?? null;
@@ -228,10 +290,11 @@ export function spellLimitsForState(state){
   for (const b of blocks){
     const className = (b.className||"").trim();
     const classLevel = clampInt(b.classLevel ?? 0, 0, 20);
+    const subclassName = (b.subclass||"").trim();
     if (!className || classLevel<=0) continue;
 
-    const known = spellsKnownLimit(className, classLevel);
-    const cantrips = cantripsKnownLimit(className, classLevel);
+    const known = spellsKnownLimit(className, classLevel, subclassName);
+    const cantrips = cantripsKnownLimit(className, classLevel, subclassName);
     const prepared = preparedSpellsLimit({ className, classLevel, spellAbilityMod: Number(b.spellMod||0) });
 
     out.push({

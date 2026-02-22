@@ -330,6 +330,14 @@
 
         <div class="small muted mt" id="spellModeHint"></div>
 
+	        <div id="spellClassRow" class="grid two mt">
+	          <label class="field">
+	            <span>Spell list class</span>
+	            <select id="spellClassSelect"></select>
+	          </label>
+	          <div class="small muted">If you have multiple classes with spellcasting, choose which class list you are viewing.</div>
+	        </div>
+
         <div id="spellsByLevel"></div>
 
         <details class="mt">
@@ -344,21 +352,30 @@
       <div class="grid two">
         <div class="card">
           <h2>Level Up Wizard</h2>
-          <p class="muted small">
-            This is a helper. It updates levels, calculates new pick slots (ASI/feats),
-            and sets spell learn/prep limits from the rules data you provided.
-          </p>
+          <p class="muted small">Leveling, ASI or feat choices, HP rolls, and spell learning happen through the wizard (5e 2014 rules). This prevents changing those choices on the fly.</p>
 
           <div class="grid two">
             <label class="field">
-              <span>Level up</span>
-              <select id="levelUpWhich">
-                <option value="primary">Primary class</option>
-                <option value="secondary">Secondary class</option>
+              <span>Build lock</span>
+              <select id="buildLockSelect">
+                <option value="locked">Locked (recommended)</option>
+                <option value="unlocked">Unlocked (manual edits)</option>
               </select>
             </label>
-            <button id="levelUpBtn" type="button" class="btn">Increase by 1</button>
+            <div class="small muted">
+              Locked mode disables manual edits for class levels, feat and ASI picks, and known or spellbook spells.
+            </div>
           </div>
+
+          <div class="grid two mt">
+            <button id="openLevelUpWizardBtn" type="button" class="btn">Level Up...</button>
+            <button id="undoLevelUpBtn" type="button" class="btn danger">Undo last level up</button>
+          </div>
+
+          <details class="mt">
+            <summary>Level up history</summary>
+            <div id="buildLog" class="mt"></div>
+          </details>
 
           <details class="mt">
             <summary>Class choices (skills, fighting style, expertise)</summary>
@@ -370,45 +387,15 @@
 
           <details class="mt">
             <summary>Picks (ASI/Feats)</summary>
-            <div class="small muted mt">Slots = 1 at overall level 1 + ASI levels for your classes (per progression.js).</div>
+            <div class="small muted mt">Earned slots come from your class levels (5e 2014). Choose ASIs/feats inside the Level Up wizard.</div>
             <div id="picksSummary" class="mt"></div>
             <div id="picksEditor" class="mt"></div>
-          </details>
-
-          <details class="mt">
-            <summary>Quick ASI</summary>
-            <div class="grid three mt">
-              <label class="field"><span>Ability</span>
-                <select id="asiAbility">
-                  <option value="STR">STR</option>
-                  <option value="DEX">DEX</option>
-                  <option value="CON">CON</option>
-                  <option value="INT">INT</option>
-                  <option value="WIS">WIS</option>
-                  <option value="CHA">CHA</option>
-                </select>
-              </label>
-              <label class="field"><span>Increase</span>
-                <select id="asiAmount">
-                  <option value="1">+1</option>
-                  <option value="2">+2</option>
-                </select>
-              </label>
-              <button id="asiApplyBtn" class="btn" type="button">Apply ASI</button>
-            </div>
-            <div class="small muted mt">
-              This directly changes your ability score. Use Undo (below) if you apply the wrong ASI.
-            </div>
-            <div class="grid two mt">
-              <button id="asiUndoBtn" class="btn" type="button">Undo last ASI</button>
-              <div></div>
-            </div>
           </details>
         </div>
 
         <div class="card">
           <h2>Feats</h2>
-          <p class="muted small">Select feats to track. Some feats are informational (no automation), because the feat data you supplied is mostly descriptive text.</p>
+          <p class="muted small">Feats are granted during Level Up when you earn an ASI or feat choice. This list is for reference.</p>
           <div class="grid two">
             <label class="field">
               <span>Search feats</span>
@@ -543,6 +530,28 @@
       Local-first. Your character auto-saves to your browser (localStorage). Use Import/Export for backups.
     </div>
   </footer>
+
+  <!-- Level up wizard modal -->
+  <dialog id="levelUpDialog" class="modal">
+    <div class="modal-card">
+      <div class="modal-hdr">
+        <div>
+          <div class="modal-title">Level Up</div>
+          <div class="small muted" id="levelUpSubtitle"></div>
+        </div>
+        <button id="levelUpCloseBtn" class="btn small" type="button">Close</button>
+      </div>
+
+      <div id="levelUpBody" class="mt"></div>
+
+      <div class="modal-footer mt">
+        <button id="levelUpBackBtn" class="btn" type="button">Back</button>
+        <div class="spacer"></div>
+        <button id="levelUpNextBtn" class="btn" type="button">Next</button>
+        <button id="levelUpConfirmBtn" class="btn" type="button">Confirm</button>
+      </div>
+    </div>
+  </dialog>
 
   <script type="module" src="js/app.js"></script>
 </body>

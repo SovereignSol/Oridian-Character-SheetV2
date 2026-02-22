@@ -20,9 +20,14 @@ export function countAsiSlots(className, classLevel) {
   return n;
 }
 
+export function hasAsiAtLevel(className, classLevel){
+  const levels = ASI_LEVELS_BY_CLASS[className] || [];
+  return levels.includes(Number(classLevel||0));
+}
+
 export function earnedPickSlots({ multiclass, primary, secondary }) {
-  // One pick at overall level 1, per your rule.
-  let slots = 1;
+  // Strict 5e 2014: ASI/Feat choices only come from class levels (or specific racial features).
+  let slots = 0;
 
   const pName = (primary?.className || "").trim();
   const pLvl = Number(primary?.classLevel || 0);

@@ -24,7 +24,7 @@ export function clampInt(v,min,max){const n=Number(v);const i=Number.isFinite(n)
 export function defaultCharacterState(){
   const skills={}; for(const s of skillMeta) skills[s.id]=0;
   return {
-    version:6, id: cryptoRandomId(),
+    version:7, id: cryptoRandomId(),
     name:"", race:"", raceId:"", raceBonusesApplied:{}, alignment:"",
     inspirationPoints:0,
     multiclass:false,
@@ -43,7 +43,8 @@ export function defaultCharacterState(){
     equipment:null,
     rest:{preparedUnlock:0,hitDice:null},
     resources:{ spellSlotsUsed:{}, pactSlotsUsed:0, custom:[] },
-    spells:{known:[],prepared:[],pendingLearn:0,notes:""},
+    spells:{known:[],knownByBlock:{primary:[],secondary:[]},prepared:[],pendingLearn:0,notes:""},
+    build:{ locked:true, log:[], redo:[] },
     notes:"",
     details:{appearance:"",backstory:"",allies:"",treasure:""},
   };
@@ -74,7 +75,21 @@ export function deriveAndClamp(state){
   if(!Array.isArray(s.resources.custom)) s.resources.custom=[];
   if(!s.resources.spellSlotsUsed || typeof s.resources.spellSlotsUsed!=="object") s.resources.spellSlotsUsed={};
   s.resources.pactSlotsUsed=clampInt(s.resources.pactSlotsUsed,0,99);
-  if(!s.spells) s.spells={known:[],prepared:[],pendingLearn:0,notes:""};
+  if(!s.spells) s.spells={known:[],knownByBlock:{primary:[],secondary:[]},prepared:[],pendingLearn:0,notes:""};
+  // Back-compat: if knownByBlock missing, treat existing `known` as primary.
+  if(!s.spells.knownByBlock || typeof s.spells.knownByBlock!=="object"){
+    s.spells.knownByBlock = { primary: Array.isArray(s.spells.known)?s.spells.known:[], secondary: [] };
+  }
+  if(!Array.isArray(s.spells.knownByBlock.primary)) s.spells.knownByBlock.primary=[];
+  if(!Array.isArray(s.spells.knownByBlock.secondary)) s.spells.knownByBlock.secondary=[];
+  if(!Array.isArray(s.spells.known)) s.spells.known=[];
+  if(!Array.isArray(s.spells.prepared)) s.spells.prepared=[];
+  if(typeof s.spells.notes!=="string") s.spells.notes=String(s.spells.notes||"");
+
+  if(!s.build || typeof s.build!=="object") s.build={ locked:true, log:[], redo:[] };
+  if(typeof s.build.locked!=="boolean") s.build.locked=true;
+  if(!Array.isArray(s.build.log)) s.build.log=[];
+  if(!Array.isArray(s.build.redo)) s.build.redo=[];
   return s;
 }
 export function loadCharacterState(){
@@ -94,6 +109,7 @@ export function loadCharacterState(){
       secondary:{...b.secondary,...(p.secondary||{})},
       details:{...b.details,...(p.details||{})},
       spells:{...b.spells,...(p.spells||{})},
+      build:{...b.build,...(p.build||{})},
       rest:{...b.rest,...(p.rest||{})},
       resources:{...b.resources,...(p.resources||{})},
       raceBonusesApplied:{...b.raceBonusesApplied,...(p.raceBonusesApplied||{})},

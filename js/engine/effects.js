@@ -85,15 +85,19 @@ export function applyEffects(state, effects, ctx = {}) {
 
       const desiredMax = clampInt(Number(max), 0, 9999);
       const fill = (e.fill === undefined) ? true : !!e.fill;
+      const src = String(ctx?.source || "");
 
       let r = next.resources.custom.find(x => String(x?.name || "").trim() === name) || null;
       if (!r) {
-        next.resources.custom.push({ name, cur: fill ? desiredMax : 0, max: desiredMax, reset });
+        next.resources.custom.push({ name, cur: fill ? desiredMax : 0, max: desiredMax, reset, source: src });
       } else {
+        // Only auto-maintain the resource if it was created by the same source, or if it has no source yet.
+        if (r.source && src && r.source !== src) continue;
         r.reset = reset || (r.reset || "none");
         r.max = desiredMax;
         r.cur = clampInt(Number(r.cur || 0), 0, desiredMax);
         if (fill) r.cur = desiredMax;
+        if (!r.source && src) r.source = src;
       }
     }
   }
