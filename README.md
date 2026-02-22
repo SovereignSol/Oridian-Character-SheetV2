@@ -44,6 +44,7 @@ Open the folder in VS Code, then run the Live Server extension.
 - `data/spellcasting.json` (spell lists and progressions)
 - `data/spells.json`       (spell catalog)
 - `data/traits_all_feats.json` (feat list, mostly descriptive text)
+- `data/class_features.json` (per-class, per-level feature grants and choice points)
 
 ## Cloud sync (optional)
 
@@ -76,3 +77,13 @@ Example effect object:
 { "type": "skillProficiency", "skillId": "perception", "level": 1 }
 ```
 
+
+### Class features and level-up choices
+
+The sheet can auto-grant class features and guide you through "choice points" (skill proficiencies, Fighting Style, Expertise, etc.) using:
+
+- `data/class_features.json`
+
+These are applied with stable keys into `state.features` (source `class-primary` / `class-secondary`). Choices are stored in `state.classChoices`.
+
+You can extend this file to include more per-level grants and structured effects.

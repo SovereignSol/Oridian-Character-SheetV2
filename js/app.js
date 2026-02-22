@@ -20,6 +20,7 @@ import { earnedPickSlots } from "./engine/progression.js";
 import { hitDieForClass, defaultHitDicePools, applyShortRestHitDice, applyLongRest } from "./engine/rest.js";
 import { recommendedHpMax, spellSlotsForState, spellLimitsForState } from "./engine/rules_5e2014.js";
 import { allowedSpellIds, spellsByLevel, isPreparedCaster, isKnownCaster, alwaysPreparedIds } from "./engine/spells_engine.js";
+import { syncClassFeatures, listClassChoicesForState, setClassChoice } from "./engine/class_features.js";
 
 import { isCloudConfigured, cloudSave, cloudLoad } from "./engine/cloud.js";
 
@@ -38,6 +39,7 @@ const DATA = {
   spells: null,
   subclasses: null,
   feats: null,
+  classFeatures: null,
 };
 
 async function loadAllData(){
@@ -49,6 +51,7 @@ async function loadAllData(){
     spells,
     subclasses,
     feats,
+    classFeatures,
   ] = await Promise.all([
     loadJson("data/classes.json"),
     loadJson("data/backgrounds.json"),
@@ -57,6 +60,7 @@ async function loadAllData(){
     loadJson("data/spells.json"),
     loadJson("data/subclasses.json"),
     loadJson("data/traits_all_feats.json"),
+    loadJson("data/class_features.json"),
   ]);
 
   DATA.classes = classes;
@@ -66,6 +70,7 @@ async function loadAllData(){
   DATA.spells = spells;
   DATA.subclasses = subclasses;
   DATA.feats = feats;
+  DATA.classFeatures = classFeatures;
 }
 
 function $(id){ return document.getElementById(id); }
@@ -905,6 +910,130 @@ function renderPicksAndFeats(){
   root.appendChild(wrap);
 }
 
+
+function renderClassChoices(){
+  const root = $("classChoicesPanel");
+  if (!root) return;
+
+  const choices = listClassChoicesForState(state, DATA.classFeatures);
+  root.innerHTML = "";
+
+  if (!choices.length){
+    root.innerHTML = `<div class="muted small">No pending class choices. (Or class_features.json has no choices for your current classes.)</div>`;
+    return;
+  }
+
+  for (const c of choices){
+    const box = document.createElement("div");
+    box.className = "feature";
+    const selCount = (c.selected||[]).length;
+
+    const hdr = document.createElement("div");
+    hdr.className = "hdr";
+    hdr.innerHTML = `
+      <div>
+        <div class="name">${escapeHtml(c.name)} <span class="meta">(${escapeHtml(c.className)} ${c.which}, level ${c.level})</span></div>
+        <div class="src">${escapeHtml(c.prompt || "")} ${c.choose ? `<span class="muted small">Choose ${c.choose}</span>` : ""}</div>
+      </div>
+    `;
+    box.appendChild(hdr);
+
+    const body = document.createElement("div");
+    body.className = "txt";
+    const fulfilled = !!c.fulfilled;
+
+    if (fulfilled){
+      const pickedNames = (c.options||[])
+        .filter(o => (c.selected||[]).includes(String(o?.id)))
+        .map(o => String(o?.name || o?.id))
+        .join(", ") || "(unknown)";
+      body.innerHTML = `<div class="muted small">Selected: <strong>${escapeHtml(pickedNames)}</strong></div>`;
+    } else {
+      const optWrap = document.createElement("div");
+      optWrap.className = "grid two";
+
+      const options = Array.isArray(c.options) ? c.options : [];
+      for (const o of options){
+        const oid = String(o?.id || "");
+        if (!oid) continue;
+        const lbl = String(o?.name || oid);
+        const checked = (c.selected||[]).includes(oid);
+
+        const lab = document.createElement("label");
+        lab.className = "field";
+        lab.style.flexDirection = "row";
+        lab.style.alignItems = "center";
+        lab.style.gap = "8px";
+        lab.style.margin = "0";
+
+        lab.innerHTML = `
+          <input type="checkbox" class="classChoiceOpt" data-choicekey="${escapeAttr(c.choiceKey)}" data-opt="${escapeAttr(oid)}" ${checked ? "checked" : ""}>
+          <span>${escapeHtml(lbl)}</span>
+        `;
+        optWrap.appendChild(lab);
+      }
+
+      const actions = document.createElement("div");
+      actions.className = "grid two mt";
+      actions.innerHTML = `
+        <div class="muted small">Selected: <strong><span data-count="${escapeAttr(c.choiceKey)}">${selCount}</span></strong> / ${c.choose}</div>
+        <button class="btn small classChoiceApply" type="button" data-choicekey="${escapeAttr(c.choiceKey)}">Apply choice</button>
+      `;
+
+      body.appendChild(optWrap);
+      body.appendChild(actions);
+    }
+
+    box.appendChild(body);
+    root.appendChild(box);
+  }
+
+  // Wire handlers (delegated-ish)
+  qa(".classChoiceOpt", root).forEach(inp => {
+    inp.addEventListener("change", () => {
+      const ckey = String(inp.dataset.choicekey || "");
+      const all = qa(`.classChoiceOpt[data-choicekey="${cssEscape(ckey)}"]`, root);
+      const checked = all.filter(x => x.checked);
+
+      // enforce max
+      const choice = choices.find(x => x.choiceKey === ckey);
+      const max = choice ? Number(choice.choose||1) : 1;
+      if (checked.length > max){
+        inp.checked = false;
+        return;
+      }
+
+      const counter = q(`span[data-count="${cssEscape(ckey)}"]`, root);
+      if (counter) counter.textContent = String(all.filter(x => x.checked).length);
+    });
+  });
+
+  qa(".classChoiceApply", root).forEach(btn => {
+    btn.addEventListener("click", () => {
+      const ckey = String(btn.dataset.choicekey || "");
+      const choice = choices.find(x => x.choiceKey === ckey);
+      if (!choice) return;
+
+      const all = qa(`.classChoiceOpt[data-choicekey="${cssEscape(ckey)}"]`, root);
+      const picked = all.filter(x => x.checked).map(x => String(x.dataset.opt||"")).filter(Boolean);
+
+      if (picked.length !== Number(choice.choose||1)){
+        alert(`Please choose exactly ${choice.choose} option(s).`);
+        return;
+      }
+
+      state = setClassChoice(state, ckey, picked);
+      save(); rerender();
+    });
+  });
+}
+
+function cssEscape(s){
+  // minimal CSS.escape polyfill for attribute selectors
+  return String(s||"").replace(/["\\]/g, "\\$&");
+}
+
+
 function renderDataStatus(){
   const lines = [];
   lines.push(`classes.json: ${Array.isArray(DATA.classes) ? DATA.classes.length : "?"}`);
@@ -913,6 +1042,7 @@ function renderDataStatus(){
   lines.push(`spellcasting.json: classes=${Object.keys(DATA.spellcasting?.classes||{}).length}, progressions=${Object.keys(DATA.spellcasting?.progressions||{}).length}`);
   lines.push(`spells.json: ${Array.isArray(DATA.spells?.spells) ? DATA.spells.spells.length : "?"}`);
   lines.push(`traits_all_feats.json: ${Array.isArray(DATA.feats?.items) ? DATA.feats.items.length : "?"}`);
+  lines.push(`class_features.json: ${Object.keys(DATA.classFeatures?.classes||{}).length}`);
   $("dataStatus").textContent = lines.join(" | ");
 }
 
@@ -1130,6 +1260,7 @@ function initStaticBindings(){
     const out = await cloudLoad();
     $("cloudStatus").textContent = out.message || String(out.ok);
     state = loadCharacterState();
+  state = syncClassFeatures(state, DATA.classFeatures);
     state.equipment = state.equipment || defaultEquipment();
     rerender();
   });
@@ -1257,8 +1388,12 @@ function stripSourceContributions(st, source){
     for (const [k,v] of Object.entries(next.profSources.skills)){
       if (v === source){
         delete next.profSources.skills[k];
-        // If the proficiency level was only 1, remove it as well.
-        if (next.skills && Number(next.skills[k]||0) === 1) next.skills[k] = 0;
+        // If the proficiency came from this source, roll it back.
+        if (next.skills){
+          const cur = Number(next.skills[k]||0);
+          if (cur === 1) next.skills[k] = 0;
+          else if (cur === 2) next.skills[k] = 1;
+        }
       }
     }
   }
@@ -1344,6 +1479,7 @@ function rerender(){
   renderEquipment();
   renderRest();
   renderPicksAndFeats();
+  renderClassChoices();
 
   // Cloud buttons
   const cloudOn = isCloudConfigured();
@@ -1372,10 +1508,12 @@ function rerenderRestOnly(){
 
 function rerenderLevelOnly(){
   renderPicksAndFeats();
+  renderClassChoices();
   renderCore();
 }
 
 function save(){
+  state = syncClassFeatures(state, DATA.classFeatures);
   state = saveCharacterState(state);
 }
 
@@ -1403,6 +1541,7 @@ async function boot(){
   initSelectOptions();
 
   state = loadCharacterState();
+  state = syncClassFeatures(state, DATA.classFeatures);
   state.equipment = state.equipment || defaultEquipment();
 
   // Default hit dice pools, if missing
@@ -1420,6 +1559,8 @@ async function boot(){
   });
 
   $("primaryClass").addEventListener("change", () => {
+    // Changing class removes auto-applied class features for this block.
+    state = stripSourceContributions(state, "class-primary");
     state.primary.className = $("primaryClass").value;
     // If no subclass applies, clear
     state.primary.subclass = "";
@@ -1439,10 +1580,12 @@ async function boot(){
 
   $("multiclass").addEventListener("change", () => {
     state.multiclass = !!$("multiclass").checked;
+    if (!state.multiclass) state = stripSourceContributions(state, "class-secondary");
     save(); rerender();
   });
 
   $("secondaryClass").addEventListener("change", () => {
+    state = stripSourceContributions(state, "class-secondary");
     state.secondary.className = $("secondaryClass").value;
     state.secondary.subclass = "";
     state.secondary.spellMod = computeSpellModForBlock(state.secondary);

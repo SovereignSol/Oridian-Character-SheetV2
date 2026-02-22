@@ -1,0 +1,2727 @@
+{
+  "version": 1,
+  "classes": {
+    "Barbarian": {
+      "levels": {
+        "1": {
+          "grants": [
+            {
+              "id": "rage",
+              "name": "Rage",
+              "text": "Track your rages per long rest.",
+              "effects": [
+                {
+                  "type": "resourceEnsure",
+                  "name": "Rage",
+                  "reset": "long",
+                  "maxByLevel": {
+                    "1": 2,
+                    "2": 2,
+                    "3": 3,
+                    "4": 3,
+                    "5": 3,
+                    "6": 4,
+                    "7": 4,
+                    "8": 4,
+                    "9": 4,
+                    "10": 4,
+                    "11": 4,
+                    "12": 5,
+                    "13": 5,
+                    "14": 5,
+                    "15": 5,
+                    "16": 6,
+                    "17": 6,
+                    "18": 6,
+                    "19": 6,
+                    "20": 999
+                  },
+                  "fill": true,
+                  "note": "Level 20 is effectively unlimited; this sheet uses 999."
+                }
+              ]
+            },
+            {
+              "id": "unarmoredDefense",
+              "name": "Unarmored Defense",
+              "text": "While not wearing armor, your AC equals 10 + DEX mod + CON mod. (Not auto-applied.)"
+            }
+          ],
+          "choices": [
+            {
+              "id": "skills",
+              "name": "Skill Proficiencies",
+              "prompt": "Choose 2 skills (Barbarian).",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "animalHandling",
+                  "name": "Animal Handling",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "animalHandling",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "athletics",
+                  "name": "Athletics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "athletics",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "intimidation",
+                  "name": "Intimidation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "intimidation",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "nature",
+                  "name": "Nature",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "nature",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "perception",
+                  "name": "Perception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "perception",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "survival",
+                  "name": "Survival",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "survival",
+                      "level": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Fighter": {
+      "levels": {
+        "1": {
+          "grants": [
+            {
+              "id": "secondWind",
+              "name": "Second Wind",
+              "text": "Once per short rest, you can regain hit points.",
+              "effects": [
+                {
+                  "type": "resourceEnsure",
+                  "name": "Second Wind",
+                  "reset": "short",
+                  "max": 1,
+                  "fill": true
+                }
+              ]
+            }
+          ],
+          "choices": [
+            {
+              "id": "skills",
+              "name": "Skill Proficiencies",
+              "prompt": "Choose 2 skills (Fighter).",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "acrobatics",
+                  "name": "Acrobatics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "acrobatics",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "animalHandling",
+                  "name": "Animal Handling",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "animalHandling",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "athletics",
+                  "name": "Athletics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "athletics",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "history",
+                  "name": "History",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "history",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "intimidation",
+                  "name": "Intimidation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "intimidation",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "perception",
+                  "name": "Perception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "perception",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "survival",
+                  "name": "Survival",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "survival",
+                      "level": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "fightingStyle",
+              "name": "Fighting Style",
+              "prompt": "Choose 1 Fighting Style (Fighter).",
+              "choose": 1,
+              "options": [
+                {
+                  "id": "archery",
+                  "name": "Archery",
+                  "text": "You gain a bonus to attack rolls you make with ranged weapons.",
+                  "effects": []
+                },
+                {
+                  "id": "defense",
+                  "name": "Defense",
+                  "text": "While you are wearing armor, you gain a +1 bonus to AC. (Not auto-applied, add AC bonus manually if desired.)",
+                  "effects": []
+                },
+                {
+                  "id": "dueling",
+                  "name": "Dueling",
+                  "text": "When wielding a melee weapon in one hand and no other weapons, you gain a bonus to damage rolls with that weapon.",
+                  "effects": []
+                },
+                {
+                  "id": "greatWeaponFighting",
+                  "name": "Great Weapon Fighting",
+                  "text": "When you roll 1 or 2 on a damage die for an attack with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll.",
+                  "effects": []
+                },
+                {
+                  "id": "protection",
+                  "name": "Protection",
+                  "text": "When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage. You must be wielding a shield.",
+                  "effects": []
+                },
+                {
+                  "id": "twoWeaponFighting",
+                  "name": "Two-Weapon Fighting",
+                  "text": "When you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack.",
+                  "effects": []
+                }
+              ]
+            }
+          ]
+        },
+        "2": {
+          "grants": [
+            {
+              "id": "actionSurge",
+              "name": "Action Surge",
+              "text": "Take one additional action on your turn (uses reset on short rest).",
+              "effects": [
+                {
+                  "type": "resourceEnsure",
+                  "name": "Action Surge",
+                  "reset": "short",
+                  "maxByLevel": {
+                    "2": 1,
+                    "3": 1,
+                    "4": 1,
+                    "5": 1,
+                    "6": 1,
+                    "7": 1,
+                    "8": 1,
+                    "9": 1,
+                    "10": 1,
+                    "11": 1,
+                    "12": 1,
+                    "13": 1,
+                    "14": 1,
+                    "15": 1,
+                    "16": 1,
+                    "17": 2,
+                    "18": 2,
+                    "19": 2,
+                    "20": 2
+                  },
+                  "fill": true
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Rogue": {
+      "levels": {
+        "1": {
+          "grants": [
+            {
+              "id": "thievesCant",
+              "name": "Thieves' Cant",
+              "text": "You know thieves' cant. (Informational.)"
+            },
+            {
+              "id": "thievesTools",
+              "name": "Thieves' Tools Proficiency",
+              "text": "You gain proficiency with thieves' tools.",
+              "effects": [
+                {
+                  "type": "toolProficiency",
+                  "value": "Thieves' tools"
+                }
+              ]
+            }
+          ],
+          "choices": [
+            {
+              "id": "skills",
+              "name": "Skill Proficiencies",
+              "prompt": "Choose 4 skills (Rogue).",
+              "choose": 4,
+              "options": [
+                {
+                  "id": "acrobatics",
+                  "name": "Acrobatics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "acrobatics",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "athletics",
+                  "name": "Athletics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "athletics",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "deception",
+                  "name": "Deception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "deception",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "intimidation",
+                  "name": "Intimidation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "intimidation",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "investigation",
+                  "name": "Investigation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "investigation",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "perception",
+                  "name": "Perception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "perception",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "performance",
+                  "name": "Performance",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "performance",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "persuasion",
+                  "name": "Persuasion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "persuasion",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "sleightOfHand",
+                  "name": "Sleight of Hand",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "sleightOfHand",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "stealth",
+                  "name": "Stealth",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "stealth",
+                      "level": 1
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "id": "expertise",
+              "name": "Expertise",
+              "prompt": "Choose 2 skills to gain Expertise (double proficiency).",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "acrobatics",
+                  "name": "Acrobatics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "acrobatics",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "animalHandling",
+                  "name": "Animal Handling",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "animalHandling",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "arcana",
+                  "name": "Arcana",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "arcana",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "athletics",
+                  "name": "Athletics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "athletics",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "deception",
+                  "name": "Deception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "deception",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "history",
+                  "name": "History",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "history",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "intimidation",
+                  "name": "Intimidation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "intimidation",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "investigation",
+                  "name": "Investigation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "investigation",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "medicine",
+                  "name": "Medicine",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "medicine",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "nature",
+                  "name": "Nature",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "nature",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "perception",
+                  "name": "Perception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "perception",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "performance",
+                  "name": "Performance",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "performance",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "persuasion",
+                  "name": "Persuasion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "persuasion",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "religion",
+                  "name": "Religion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "religion",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "sleightOfHand",
+                  "name": "Sleight of Hand",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "sleightOfHand",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "stealth",
+                  "name": "Stealth",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "stealth",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "survival",
+                  "name": "Survival",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "survival",
+                      "level": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "6": {
+          "choices": [
+            {
+              "id": "expertise2",
+              "name": "Expertise",
+              "prompt": "Choose 2 additional skills to gain Expertise.",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "acrobatics",
+                  "name": "Acrobatics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "acrobatics",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "animalHandling",
+                  "name": "Animal Handling",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "animalHandling",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "arcana",
+                  "name": "Arcana",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "arcana",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "athletics",
+                  "name": "Athletics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "athletics",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "deception",
+                  "name": "Deception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "deception",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "history",
+                  "name": "History",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "history",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "intimidation",
+                  "name": "Intimidation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "intimidation",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "investigation",
+                  "name": "Investigation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "investigation",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "medicine",
+                  "name": "Medicine",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "medicine",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "nature",
+                  "name": "Nature",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "nature",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "perception",
+                  "name": "Perception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "perception",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "performance",
+                  "name": "Performance",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "performance",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "persuasion",
+                  "name": "Persuasion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "persuasion",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "religion",
+                  "name": "Religion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "religion",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "sleightOfHand",
+                  "name": "Sleight of Hand",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "sleightOfHand",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "stealth",
+                  "name": "Stealth",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "stealth",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "survival",
+                  "name": "Survival",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "survival",
+                      "level": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Bard": {
+      "levels": {
+        "1": {
+          "grants": [
+            {
+              "id": "bardicInspiration",
+              "name": "Bardic Inspiration",
+              "text": "You can inspire others. Uses per rest depend on CHA mod. Add a custom resource if desired."
+            },
+            {
+              "id": "spellcasting",
+              "name": "Spellcasting",
+              "text": "You can cast bard spells. Use the Spells tab to track known spells."
+            }
+          ],
+          "choices": [
+            {
+              "id": "skills",
+              "name": "Skill Proficiencies",
+              "prompt": "Choose 3 skills (Bard).",
+              "choose": 3,
+              "options": [
+                {
+                  "id": "acrobatics",
+                  "name": "Acrobatics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "acrobatics",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "animalHandling",
+                  "name": "Animal Handling",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "animalHandling",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "arcana",
+                  "name": "Arcana",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "arcana",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "athletics",
+                  "name": "Athletics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "athletics",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "deception",
+                  "name": "Deception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "deception",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "history",
+                  "name": "History",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "history",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "intimidation",
+                  "name": "Intimidation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "intimidation",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "investigation",
+                  "name": "Investigation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "investigation",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "medicine",
+                  "name": "Medicine",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "medicine",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "nature",
+                  "name": "Nature",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "nature",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "perception",
+                  "name": "Perception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "perception",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "performance",
+                  "name": "Performance",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "performance",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "persuasion",
+                  "name": "Persuasion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "persuasion",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "religion",
+                  "name": "Religion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "religion",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "sleightOfHand",
+                  "name": "Sleight of Hand",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "sleightOfHand",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "stealth",
+                  "name": "Stealth",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "stealth",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "survival",
+                  "name": "Survival",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "survival",
+                      "level": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "3": {
+          "choices": [
+            {
+              "id": "expertise",
+              "name": "Expertise",
+              "prompt": "Choose 2 skills to gain Expertise.",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "acrobatics",
+                  "name": "Acrobatics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "acrobatics",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "animalHandling",
+                  "name": "Animal Handling",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "animalHandling",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "arcana",
+                  "name": "Arcana",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "arcana",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "athletics",
+                  "name": "Athletics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "athletics",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "deception",
+                  "name": "Deception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "deception",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "history",
+                  "name": "History",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "history",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "intimidation",
+                  "name": "Intimidation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "intimidation",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "investigation",
+                  "name": "Investigation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "investigation",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "medicine",
+                  "name": "Medicine",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "medicine",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "nature",
+                  "name": "Nature",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "nature",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "perception",
+                  "name": "Perception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "perception",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "performance",
+                  "name": "Performance",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "performance",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "persuasion",
+                  "name": "Persuasion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "persuasion",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "religion",
+                  "name": "Religion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "religion",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "sleightOfHand",
+                  "name": "Sleight of Hand",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "sleightOfHand",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "stealth",
+                  "name": "Stealth",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "stealth",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "survival",
+                  "name": "Survival",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "survival",
+                      "level": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "10": {
+          "choices": [
+            {
+              "id": "expertise2",
+              "name": "Expertise",
+              "prompt": "Choose 2 additional skills to gain Expertise.",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "acrobatics",
+                  "name": "Acrobatics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "acrobatics",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "animalHandling",
+                  "name": "Animal Handling",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "animalHandling",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "arcana",
+                  "name": "Arcana",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "arcana",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "athletics",
+                  "name": "Athletics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "athletics",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "deception",
+                  "name": "Deception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "deception",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "history",
+                  "name": "History",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "history",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "intimidation",
+                  "name": "Intimidation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "intimidation",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "investigation",
+                  "name": "Investigation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "investigation",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "medicine",
+                  "name": "Medicine",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "medicine",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "nature",
+                  "name": "Nature",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "nature",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "perception",
+                  "name": "Perception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "perception",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "performance",
+                  "name": "Performance",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "performance",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "persuasion",
+                  "name": "Persuasion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "persuasion",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "religion",
+                  "name": "Religion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "religion",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "sleightOfHand",
+                  "name": "Sleight of Hand",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "sleightOfHand",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "stealth",
+                  "name": "Stealth",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "stealth",
+                      "level": 2
+                    }
+                  ]
+                },
+                {
+                  "id": "survival",
+                  "name": "Survival",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "survival",
+                      "level": 2
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Cleric": {
+      "levels": {
+        "1": {
+          "grants": [
+            {
+              "id": "spellcasting",
+              "name": "Spellcasting",
+              "text": "You can cast cleric spells. Use the Spells tab to prepare spells."
+            }
+          ],
+          "choices": [
+            {
+              "id": "skills",
+              "name": "Skill Proficiencies",
+              "prompt": "Choose 2 skills (Cleric).",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "history",
+                  "name": "History",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "history",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "medicine",
+                  "name": "Medicine",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "medicine",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "persuasion",
+                  "name": "Persuasion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "persuasion",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "religion",
+                  "name": "Religion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "religion",
+                      "level": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "2": {
+          "grants": [
+            {
+              "id": "channelDivinity",
+              "name": "Channel Divinity",
+              "text": "You can channel divine energy. Track uses here.",
+              "effects": [
+                {
+                  "type": "resourceEnsure",
+                  "name": "Channel Divinity",
+                  "reset": "short",
+                  "maxByLevel": {
+                    "2": 1,
+                    "3": 1,
+                    "4": 1,
+                    "5": 1,
+                    "6": 2,
+                    "7": 2,
+                    "8": 2,
+                    "9": 2,
+                    "10": 2,
+                    "11": 2,
+                    "12": 2,
+                    "13": 2,
+                    "14": 2,
+                    "15": 2,
+                    "16": 2,
+                    "17": 2,
+                    "18": 3,
+                    "19": 3,
+                    "20": 3
+                  },
+                  "fill": true
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Druid": {
+      "levels": {
+        "1": {
+          "grants": [
+            {
+              "id": "spellcasting",
+              "name": "Spellcasting",
+              "text": "You can cast druid spells. Use the Spells tab to prepare spells."
+            }
+          ],
+          "choices": [
+            {
+              "id": "skills",
+              "name": "Skill Proficiencies",
+              "prompt": "Choose 2 skills (Druid).",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "arcana",
+                  "name": "Arcana",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "arcana",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "animalHandling",
+                  "name": "Animal Handling",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "animalHandling",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "medicine",
+                  "name": "Medicine",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "medicine",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "nature",
+                  "name": "Nature",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "nature",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "perception",
+                  "name": "Perception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "perception",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "religion",
+                  "name": "Religion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "religion",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "survival",
+                  "name": "Survival",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "survival",
+                      "level": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "2": {
+          "grants": [
+            {
+              "id": "wildShape",
+              "name": "Wild Shape",
+              "text": "You can magically assume the shape of a beast. Track uses here.",
+              "effects": [
+                {
+                  "type": "resourceEnsure",
+                  "name": "Wild Shape",
+                  "reset": "short",
+                  "maxByLevel": {
+                    "2": 2,
+                    "3": 2,
+                    "4": 2,
+                    "5": 2,
+                    "6": 2,
+                    "7": 2,
+                    "8": 2,
+                    "9": 2,
+                    "10": 2,
+                    "11": 2,
+                    "12": 2,
+                    "13": 2,
+                    "14": 2,
+                    "15": 2,
+                    "16": 2,
+                    "17": 2,
+                    "18": 2,
+                    "19": 2,
+                    "20": 2
+                  },
+                  "fill": true
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Monk": {
+      "levels": {
+        "1": {
+          "grants": [
+            {
+              "id": "martialArts",
+              "name": "Martial Arts",
+              "text": "You can use DEX for monk weapons/unarmed strikes. (Informational.)"
+            },
+            {
+              "id": "unarmoredDefense",
+              "name": "Unarmored Defense",
+              "text": "While not wearing armor or wielding a shield, your AC equals 10 + DEX mod + WIS mod. (Not auto-applied.)"
+            }
+          ],
+          "choices": [
+            {
+              "id": "skills",
+              "name": "Skill Proficiencies",
+              "prompt": "Choose 2 skills (Monk).",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "acrobatics",
+                  "name": "Acrobatics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "acrobatics",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "athletics",
+                  "name": "Athletics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "athletics",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "history",
+                  "name": "History",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "history",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "religion",
+                  "name": "Religion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "religion",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "stealth",
+                  "name": "Stealth",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "stealth",
+                      "level": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "2": {
+          "grants": [
+            {
+              "id": "ki",
+              "name": "Ki",
+              "text": "You can spend ki points for special abilities.",
+              "effects": [
+                {
+                  "type": "resourceEnsure",
+                  "name": "Ki",
+                  "reset": "short",
+                  "maxByLevel": {
+                    "2": 2,
+                    "3": 3,
+                    "4": 4,
+                    "5": 5,
+                    "6": 6,
+                    "7": 7,
+                    "8": 8,
+                    "9": 9,
+                    "10": 10,
+                    "11": 11,
+                    "12": 12,
+                    "13": 13,
+                    "14": 14,
+                    "15": 15,
+                    "16": 16,
+                    "17": 17,
+                    "18": 18,
+                    "19": 19,
+                    "20": 20
+                  },
+                  "fill": true
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Paladin": {
+      "levels": {
+        "1": {
+          "grants": [
+            {
+              "id": "layOnHands",
+              "name": "Lay on Hands",
+              "text": "You have a pool of healing power. Track points here.",
+              "effects": [
+                {
+                  "type": "resourceEnsure",
+                  "name": "Lay on Hands",
+                  "reset": "long",
+                  "maxByLevel": {
+                    "1": 5,
+                    "2": 10,
+                    "3": 15,
+                    "4": 20,
+                    "5": 25,
+                    "6": 30,
+                    "7": 35,
+                    "8": 40,
+                    "9": 45,
+                    "10": 50,
+                    "11": 55,
+                    "12": 60,
+                    "13": 65,
+                    "14": 70,
+                    "15": 75,
+                    "16": 80,
+                    "17": 85,
+                    "18": 90,
+                    "19": 95,
+                    "20": 100
+                  },
+                  "fill": true
+                }
+              ]
+            },
+            {
+              "id": "divineSense",
+              "name": "Divine Sense",
+              "text": "You can open your awareness to detect strong evil and good. Uses depend on CHA mod. Add custom resource if desired."
+            }
+          ],
+          "choices": [
+            {
+              "id": "skills",
+              "name": "Skill Proficiencies",
+              "prompt": "Choose 2 skills (Paladin).",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "athletics",
+                  "name": "Athletics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "athletics",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "intimidation",
+                  "name": "Intimidation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "intimidation",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "medicine",
+                  "name": "Medicine",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "medicine",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "persuasion",
+                  "name": "Persuasion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "persuasion",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "religion",
+                  "name": "Religion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "religion",
+                      "level": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "2": {
+          "grants": [
+            {
+              "id": "divineSmite",
+              "name": "Divine Smite",
+              "text": "When you hit a creature with a melee weapon attack, you can expend a spell slot to deal radiant damage. (Informational.)"
+            },
+            {
+              "id": "spellcasting",
+              "name": "Spellcasting",
+              "text": "You can cast paladin spells. Use the Spells tab to prepare spells."
+            }
+          ],
+          "choices": [
+            {
+              "id": "fightingStyle",
+              "name": "Fighting Style",
+              "prompt": "Choose 1 Fighting Style (Paladin).",
+              "choose": 1,
+              "options": [
+                {
+                  "id": "archery",
+                  "name": "Archery",
+                  "text": "You gain a bonus to attack rolls you make with ranged weapons.",
+                  "effects": []
+                },
+                {
+                  "id": "defense",
+                  "name": "Defense",
+                  "text": "While you are wearing armor, you gain a +1 bonus to AC. (Not auto-applied, add AC bonus manually if desired.)",
+                  "effects": []
+                },
+                {
+                  "id": "dueling",
+                  "name": "Dueling",
+                  "text": "When wielding a melee weapon in one hand and no other weapons, you gain a bonus to damage rolls with that weapon.",
+                  "effects": []
+                },
+                {
+                  "id": "greatWeaponFighting",
+                  "name": "Great Weapon Fighting",
+                  "text": "When you roll 1 or 2 on a damage die for an attack with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll.",
+                  "effects": []
+                },
+                {
+                  "id": "protection",
+                  "name": "Protection",
+                  "text": "When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage. You must be wielding a shield.",
+                  "effects": []
+                },
+                {
+                  "id": "twoWeaponFighting",
+                  "name": "Two-Weapon Fighting",
+                  "text": "When you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack.",
+                  "effects": []
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Ranger": {
+      "levels": {
+        "1": {
+          "grants": [
+            {
+              "id": "favoredEnemy",
+              "name": "Favored Enemy",
+              "text": "You have significant experience studying, tracking, hunting, and even talking to a certain type of enemy. (Informational.)"
+            },
+            {
+              "id": "naturalExplorer",
+              "name": "Natural Explorer",
+              "text": "You are particularly familiar with one type of natural environment. (Informational.)"
+            }
+          ],
+          "choices": [
+            {
+              "id": "skills",
+              "name": "Skill Proficiencies",
+              "prompt": "Choose 3 skills (Ranger).",
+              "choose": 3,
+              "options": [
+                {
+                  "id": "animalHandling",
+                  "name": "Animal Handling",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "animalHandling",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "athletics",
+                  "name": "Athletics",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "athletics",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "investigation",
+                  "name": "Investigation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "investigation",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "nature",
+                  "name": "Nature",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "nature",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "perception",
+                  "name": "Perception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "perception",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "stealth",
+                  "name": "Stealth",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "stealth",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "survival",
+                  "name": "Survival",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "survival",
+                      "level": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "2": {
+          "grants": [
+            {
+              "id": "spellcasting",
+              "name": "Spellcasting",
+              "text": "You can cast ranger spells. Use the Spells tab to learn spells (known-caster)."
+            }
+          ],
+          "choices": [
+            {
+              "id": "fightingStyle",
+              "name": "Fighting Style",
+              "prompt": "Choose 1 Fighting Style (Ranger).",
+              "choose": 1,
+              "options": [
+                {
+                  "id": "archery",
+                  "name": "Archery",
+                  "text": "You gain a bonus to attack rolls you make with ranged weapons.",
+                  "effects": []
+                },
+                {
+                  "id": "defense",
+                  "name": "Defense",
+                  "text": "While you are wearing armor, you gain a +1 bonus to AC. (Not auto-applied, add AC bonus manually if desired.)",
+                  "effects": []
+                },
+                {
+                  "id": "dueling",
+                  "name": "Dueling",
+                  "text": "When wielding a melee weapon in one hand and no other weapons, you gain a bonus to damage rolls with that weapon.",
+                  "effects": []
+                },
+                {
+                  "id": "greatWeaponFighting",
+                  "name": "Great Weapon Fighting",
+                  "text": "When you roll 1 or 2 on a damage die for an attack with a melee weapon that you are wielding with two hands, you can reroll the die and must use the new roll.",
+                  "effects": []
+                },
+                {
+                  "id": "protection",
+                  "name": "Protection",
+                  "text": "When a creature you can see attacks a target other than you that is within 5 feet of you, you can use your reaction to impose disadvantage. You must be wielding a shield.",
+                  "effects": []
+                },
+                {
+                  "id": "twoWeaponFighting",
+                  "name": "Two-Weapon Fighting",
+                  "text": "When you engage in two-weapon fighting, you can add your ability modifier to the damage of the second attack.",
+                  "effects": []
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Sorcerer": {
+      "levels": {
+        "1": {
+          "grants": [
+            {
+              "id": "spellcasting",
+              "name": "Spellcasting",
+              "text": "You can cast sorcerer spells. Use the Spells tab to track spells known."
+            }
+          ],
+          "choices": [
+            {
+              "id": "skills",
+              "name": "Skill Proficiencies",
+              "prompt": "Choose 2 skills (Sorcerer).",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "arcana",
+                  "name": "Arcana",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "arcana",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "deception",
+                  "name": "Deception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "deception",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "intimidation",
+                  "name": "Intimidation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "intimidation",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "persuasion",
+                  "name": "Persuasion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "persuasion",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "religion",
+                  "name": "Religion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "religion",
+                      "level": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        "2": {
+          "grants": [
+            {
+              "id": "sorceryPoints",
+              "name": "Font of Magic (Sorcery Points)",
+              "text": "You gain sorcery points.",
+              "effects": [
+                {
+                  "type": "resourceEnsure",
+                  "name": "Sorcery Points",
+                  "reset": "long",
+                  "maxByLevel": {
+                    "2": 2,
+                    "3": 3,
+                    "4": 4,
+                    "5": 5,
+                    "6": 6,
+                    "7": 7,
+                    "8": 8,
+                    "9": 9,
+                    "10": 10,
+                    "11": 11,
+                    "12": 12,
+                    "13": 13,
+                    "14": 14,
+                    "15": 15,
+                    "16": 16,
+                    "17": 17,
+                    "18": 18,
+                    "19": 19,
+                    "20": 20
+                  },
+                  "fill": true
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Warlock": {
+      "levels": {
+        "1": {
+          "grants": [
+            {
+              "id": "pactMagic",
+              "name": "Pact Magic",
+              "text": "You can cast warlock spells using pact magic. Track pact slots in the Rest/Spells tabs."
+            }
+          ],
+          "choices": [
+            {
+              "id": "skills",
+              "name": "Skill Proficiencies",
+              "prompt": "Choose 2 skills (Warlock).",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "arcana",
+                  "name": "Arcana",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "arcana",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "deception",
+                  "name": "Deception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "deception",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "history",
+                  "name": "History",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "history",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "intimidation",
+                  "name": "Intimidation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "intimidation",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "investigation",
+                  "name": "Investigation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "investigation",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "nature",
+                  "name": "Nature",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "nature",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "religion",
+                  "name": "Religion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "religion",
+                      "level": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Wizard": {
+      "levels": {
+        "1": {
+          "grants": [
+            {
+              "id": "spellcasting",
+              "name": "Spellcasting",
+              "text": "You can cast wizard spells. Use the Spells tab to track spellbook (Known) and prepared spells."
+            }
+          ],
+          "choices": [
+            {
+              "id": "skills",
+              "name": "Skill Proficiencies",
+              "prompt": "Choose 2 skills (Wizard).",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "arcana",
+                  "name": "Arcana",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "arcana",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "history",
+                  "name": "History",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "history",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "insight",
+                  "name": "Insight",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "insight",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "investigation",
+                  "name": "Investigation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "investigation",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "medicine",
+                  "name": "Medicine",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "medicine",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "religion",
+                  "name": "Religion",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "religion",
+                      "level": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    },
+    "Artificer": {
+      "levels": {
+        "1": {
+          "grants": [
+            {
+              "id": "magicalTinkering",
+              "name": "Magical Tinkering",
+              "text": "Artificer feature (informational)."
+            },
+            {
+              "id": "spellcasting",
+              "name": "Spellcasting",
+              "text": "You can cast artificer spells. Use the Spells tab to prepare spells."
+            }
+          ],
+          "choices": [
+            {
+              "id": "skills",
+              "name": "Skill Proficiencies",
+              "prompt": "Choose 2 skills (Artificer). (List may differ by sourcebook.)",
+              "choose": 2,
+              "options": [
+                {
+                  "id": "arcana",
+                  "name": "Arcana",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "arcana",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "history",
+                  "name": "History",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "history",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "investigation",
+                  "name": "Investigation",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "investigation",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "medicine",
+                  "name": "Medicine",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "medicine",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "nature",
+                  "name": "Nature",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "nature",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "perception",
+                  "name": "Perception",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "perception",
+                      "level": 1
+                    }
+                  ]
+                },
+                {
+                  "id": "sleightOfHand",
+                  "name": "Sleight of Hand",
+                  "effects": [
+                    {
+                      "type": "skillProficiency",
+                      "skillId": "sleightOfHand",
+                      "level": 1
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      }
+    }
+  },
+  "notes": [
+    "This file is intended to store structured, rules-driven class feature grants and choice points.",
+    "Texts are short summaries, not full rulebook text. Expand and customize for your table.",
+    "Some effects are informational only."
+  ]
+}
