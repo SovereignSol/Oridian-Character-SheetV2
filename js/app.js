@@ -24,6 +24,8 @@ import { syncClassFeatures, listClassChoicesForState, setClassChoice } from "./e
 
 import { isCloudConfigured, cloudSave, cloudLoad } from "./engine/cloud.js";
 
+const COMBAT_TRACKER_STORAGE_KEY = "generic_tracker_state_v5_multiclass_pooled_packages";
+
 // ---------------------------- Data loading ----------------------------
 async function loadJson(path){
   const res = await fetch(path, { cache: "no-store" });
@@ -91,18 +93,41 @@ let state = null;
 function initTabs(){
   const tabs = qa(".tab");
   const panels = qa(".tab-panel");
+
   const show = (name) => {
     for (const t of tabs){
       const on = t.dataset.tab === name;
       t.setAttribute("aria-selected", on ? "true" : "false");
+      // Roving tabindex for keyboard-friendly tab navigation
+      t.tabIndex = on ? 0 : -1;
     }
     for (const p of panels){
-      p.classList.toggle("hidden", p.dataset.tab !== name);
+      const on = p.dataset.tab === name;
+      p.classList.toggle("hidden", !on);
     }
   };
-  for (const t of tabs){
+
+  tabs.forEach((t, idx)=>{
     t.addEventListener("click", () => show(t.dataset.tab));
-  }
+
+    // Keyboard navigation (WAI-ARIA Tabs pattern)
+    t.addEventListener("keydown", (ev)=>{
+      const k = ev.key;
+      if (!["ArrowLeft","ArrowRight","Home","End"].includes(k)) return;
+      ev.preventDefault();
+      let ni = idx;
+      if (k === "ArrowRight") ni = (idx + 1) % tabs.length;
+      else if (k === "ArrowLeft") ni = (idx - 1 + tabs.length) % tabs.length;
+      else if (k === "Home") ni = 0;
+      else if (k === "End") ni = tabs.length - 1;
+      show(tabs[ni].dataset.tab);
+      tabs[ni].focus();
+    });
+  });
+
+  // Ensure initial ARIA state matches the visible panel.
+  const initial = tabs.find(t => t.getAttribute("aria-selected") === "true")?.dataset.tab || "sheet";
+  show(initial);
 }
 
 // ---------------------------- Rendering helpers ----------------------------
@@ -1359,7 +1384,10 @@ function initStaticBindings(){
 
   // Export / import
   $("exportBtn").addEventListener("click", () => {
-    $("exportBox").value = JSON.stringify(state, null, 2);
+    const out = (typeof structuredClone === "function") ? structuredClone(state) : JSON.parse(JSON.stringify(state));
+    const ct = loadCombatTrackerState();
+    if (ct) out._combatTracker = ct;
+    $("exportBox").value = JSON.stringify(out, null, 2);
   });
   $("importBtn").addEventListener("click", () => {
     const raw = $("importBox").value;
@@ -1379,7 +1407,10 @@ function initStaticBindings(){
   $("resetBtn").addEventListener("click", () => {
     state = defaultCharacterState();
     state.equipment = defaultEquipment();
-    save(); rerender();
+    clearCombatTrackerState();
+    save();
+    rerender();
+    notifyCombatFrame();
   });
 
   // Cloud
@@ -1722,41 +1753,85 @@ function renderLevelUpWizardStep(){
   }
 
   if (stepId === "hp"){
-    const dieStr = hitDieForClass(LEVELUP_WIZ.className);
-    const dieMax = clampInt(String(dieStr||"").replace(/^d/,""), 1, 100);
-    const con = abilityMod(state.abilities?.CON ?? 10);
-    const roll = (LEVELUP_WIZ.hpRoll === null) ? "" : String(LEVELUP_WIZ.hpRoll);
-    const gain = (Number.isFinite(Number(LEVELUP_WIZ.hpRoll))) ? Math.max(1, Number(LEVELUP_WIZ.hpRoll) + con) : 0;
+  const dieStr = hitDieForClass(LEVELUP_WIZ.className, DATA.classes);
+  const dieMax = clampInt(String(dieStr||"d8").replace(/^d/,""), 1, 100);
+  const avg = Math.floor(dieMax/2) + 1;
+  const con = abilityMod(state.abilities?.con ?? 10);
+  const curMax = clampInt(Number(state.combat?.hpMax || 0), 0, 99999);
 
-    body.innerHTML = `
-      <div class="grid two">
-        <div>
-          <div class="small muted">Hit Die</div>
-          <div><strong>${escapeHtml(dieStr||"d?")}</strong></div>
-          <div class="small muted mt">CON modifier: <strong>${con>=0?"+":""}${con}</strong></div>
-        </div>
-        <label class="field">
-          <span>HP roll (1 to ${dieMax})</span>
-          <input id="wizHpRoll" type="number" min="1" max="${dieMax}" value="${escapeAttr(roll)}" placeholder="${dieStr}" />
-        </label>
-      </div>
-      <div class="small muted mt">HP gain = roll + CON modifier (minimum 1).</div>
-      <div class="mt">Computed HP gain: <strong id="wizHpGain">${gain ? gain : "—"}</strong></div>
-      <div id="wizErr" class="wiz-err small mt"></div>
-    `;
+  const rollVal = clampInt(Number(LEVELUP_WIZ.hpRoll || 0), 0, dieMax);
+  const gainVal = rollVal ? Math.max(1, rollVal + con) : 0;
+  LEVELUP_WIZ.hpRoll = rollVal || null;
+  LEVELUP_WIZ.hpGain = rollVal ? gainVal : null;
 
-    const inp = body.querySelector("#wizHpRoll");
-    const out = body.querySelector("#wizHpGain");
-    if (inp) inp.addEventListener("input", () => {
-      const v = clampInt(inp.value, 0, dieMax);
-      if (!v) { LEVELUP_WIZ.hpRoll = null; if (out) out.textContent = "—"; return; }
-      LEVELUP_WIZ.hpRoll = v;
-      const g = Math.max(1, v + con);
-      LEVELUP_WIZ.hpGain = g;
-      if (out) out.textContent = String(g);
-    });
-    return;
-  }
+  const gainText = (LEVELUP_WIZ.hpGain != null) ? String(LEVELUP_WIZ.hpGain) : "N/A";
+  const newMaxText = (LEVELUP_WIZ.hpGain != null) ? String(curMax + LEVELUP_WIZ.hpGain) : "N/A";
+
+  body.innerHTML = `
+    <div class="small muted">
+      Hit Die for <b>${escapeHtml(LEVELUP_WIZ.className)}</b>: <b>d${dieMax}</b> (average <b>${avg}</b>).
+      Roll it, then add your CON modifier (<b>${con>=0?"+":""}${con}</b>), minimum +1.
+    </div>
+    <div class="row mt">
+      <label>Roll (1-${dieMax})
+        <input type="number" id="wizHpRoll" min="1" max="${dieMax}" value="${LEVELUP_WIZ.hpRoll||""}">
+      </label>
+      <button type="button" class="btn" id="wizHpRollBtn">Roll d${dieMax}</button>
+      <button type="button" class="btn" id="wizHpAvgBtn">Use average (${avg})</button>
+    </div>
+    <div class="small muted mt">
+      Current Max HP: <b>${curMax}</b>,
+      HP gain: <b id="wizHpGain">${gainText}</b>,
+      new Max HP: <b id="wizHpNewMax">${newMaxText}</b>.
+    </div>
+  `;
+
+  const rollDie = (sides) => {
+    const n = clampInt(sides, 1, 1000);
+    if (n <= 1) return 1;
+    try{
+      if (window.crypto && crypto.getRandomValues){
+        const arr = new Uint32Array(1);
+        const max = 0xFFFFFFFF;
+        const limit = max - (max % n);
+        let x = 0;
+        do { crypto.getRandomValues(arr); x = arr[0]; } while (x >= limit);
+        return (x % n) + 1;
+      }
+    }catch{}
+    return Math.floor(Math.random() * n) + 1;
+  };
+
+  const inp = body.querySelector("#wizHpRoll");
+  const out = body.querySelector("#wizHpGain");
+  const outNew = body.querySelector("#wizHpNewMax");
+
+  const applyRoll = (v) => {
+    const vv = clampInt(v, 0, dieMax);
+    if (!vv){
+      LEVELUP_WIZ.hpRoll = null;
+      LEVELUP_WIZ.hpGain = null;
+      if (out) out.textContent = "N/A";
+      if (outNew) outNew.textContent = "N/A";
+      if (inp) inp.value = "";
+      return;
+    }
+    LEVELUP_WIZ.hpRoll = vv;
+    const g = Math.max(1, vv + con);
+    LEVELUP_WIZ.hpGain = g;
+    if (out) out.textContent = String(g);
+    if (outNew) outNew.textContent = String(curMax + g);
+    if (inp) inp.value = String(vv);
+  };
+
+  if (inp) inp.addEventListener("input", () => applyRoll(Number(inp.value || 0)));
+  const btnRoll = body.querySelector("#wizHpRollBtn");
+  const btnAvg = body.querySelector("#wizHpAvgBtn");
+  if (btnRoll) btnRoll.addEventListener("click", () => applyRoll(rollDie(dieMax)));
+  if (btnAvg) btnAvg.addEventListener("click", () => applyRoll(avg));
+
+  return;
+}
 
   if (stepId === "asi"){
     const isFeat = LEVELUP_WIZ.asiFeat?.type === "feat";
@@ -1932,23 +2007,36 @@ function renderLevelUpWizardStep(){
     // Subclass school restrictions (5e 2014): EK learns abjuration/evocation except at 8/14/20, AT learns enchantment/illusion except at 8/14/20.
     const anySchoolLevels = new Set([8,14,20]);
     let spellCandidates = allowed.filter(s => Number(s.level||0) >= 1 && !knownSet.has(s.id));
-    if (cn === "Fighter" && sn === "Eldritch Knight" && !anySchoolLevels.has(Number(toLv))){
-      const ok = new Set(["abjuration","evocation"]);
-      spellCandidates = spellCandidates.filter(s => ok.has(String(s.school||"").toLowerCase()));
-    }
-    if (cn === "Rogue" && sn === "Arcane Trickster" && !anySchoolLevels.has(Number(toLv))){
-      const ok = new Set(["enchantment","illusion"]);
-      spellCandidates = spellCandidates.filter(s => ok.has(String(s.school||"").toLowerCase()));
-    }
     const spells = spellCandidates.sort((a,b)=> (Number(a.level||0)-Number(b.level||0)) || a.name.localeCompare(b.name));
     const knownNonCantrip = (state.spells?.known || []).map(id=>byId.get(id)).filter(s=>s && Number(s.level||0) >= 1);
 
     const canNeed = clampInt(plan?.cantripsToChoose ?? 0, 0, 99);
     const spNeed = clampInt(plan?.spellsToChoose ?? 0, 0, 99);
+
+// Eldritch Knight / Arcane Trickster school restrictions (PHB 2014)
+const schoolRule = (() => {
+  if (cn === "Fighter" && sn === "Eldritch Knight") return { schools: new Set(["abjuration","evocation"]), label: "Abjuration or Evocation" };
+  if (cn === "Rogue" && sn === "Arcane Trickster") return { schools: new Set(["enchantment","illusion"]), label: "Enchantment or Illusion" };
+  return null;
+})();
+let requiredSchoolCount = 0;
+if (schoolRule && spNeed > 0){
+  if (anySchoolLevels.has(Number(toLv))) requiredSchoolCount = 0;
+  else if (Number(toLv) === 3) requiredSchoolCount = Math.min(2, spNeed);
+  else requiredSchoolCount = spNeed;
+}
+const schoolHintText = (!schoolRule || spNeed <= 0) ? "" : (
+  requiredSchoolCount <= 0
+    ? "School restriction: spells learned at this class level can be from any school."
+    : (requiredSchoolCount === spNeed
+        ? `School restriction: all spells you learn this level must be ${schoolRule.label}.`
+        : `School restriction: at least ${requiredSchoolCount} of the spells you learn this level must be ${schoolRule.label}.`)
+);
     const autoCantrips = plan?.autoCantripIds || [];
 
     body.innerHTML = `
       <div class="small muted">Learn spells for <strong>${escapeHtml(cn)}</strong> level ${toLv}.</div>
+      ${schoolHintText ? `<div class="small muted mt">${escapeHtml(schoolHintText)}</div>` : ""}
       ${autoCantrips.length ? `<div class="small muted mt">Auto-granted: <strong>${autoCantrips.map(id=>escapeHtml(byId.get(id)?.name || id)).join(", ")}</strong></div>` : ""}
 
       ${canNeed ? `
@@ -1964,7 +2052,7 @@ function renderLevelUpWizardStep(){
         <div class="mt">
           <div><strong>Choose ${spNeed} spell${spNeed===1?"":"s"} (${escapeHtml(plan?.spellListLabel || "Known")})</strong></div>
           <label class="field mt"><span>Filter</span><input id="wizSpellFilter" type="text" placeholder="Type to filter spells" /></label>
-          <select id="wizSpellSelect" multiple size="12" class="mt">${spells.map(s=>`<option value="${escapeAttr(s.id)}">${escapeHtml(s.name)} (L${Number(s.level||0)})</option>`).join("")}</select>
+          <select id="wizSpellSelect" multiple size="12" class="mt">${spells.map(s=>`<option value="${escapeAttr(s.id)}">${escapeHtml(s.name)} (L${Number(s.level||0)}${s.school ? ", " + escapeHtml(s.school) : ""})</option>`).join("")}</select>
           <div class="small muted mt">Selected: <span id="wizSpellCount">0</span> of ${spNeed}</div>
         </div>
       ` : ""}
@@ -2022,8 +2110,8 @@ function renderLevelUpWizardStep(){
       const renderRep = () => {
         LEVELUP_WIZ.spells.doReplace = !!doRep.checked;
         if (!doRep.checked){ repPanel.innerHTML = ""; return; }
-        const fromOpts = knownNonCantrip.map(s=>`<option value="${escapeAttr(s.id)}">${escapeHtml(s.name)} (L${Number(s.level||0)})</option>`).join("");
-        const toOpts = spells.map(s=>`<option value="${escapeAttr(s.id)}">${escapeHtml(s.name)} (L${Number(s.level||0)})</option>`).join("");
+        const fromOpts = knownNonCantrip.map(s=>`<option value="${escapeAttr(s.id)}">${escapeHtml(s.name)} (L${Number(s.level||0)}${s.school ? ", " + escapeHtml(s.school) : ""})</option>`).join("");
+        const toOpts = spells.map(s=>`<option value="${escapeAttr(s.id)}">${escapeHtml(s.name)} (L${Number(s.level||0)}${s.school ? ", " + escapeHtml(s.school) : ""})</option>`).join("");
         repPanel.innerHTML = `
           <div class="grid two">
             <label class="field">
@@ -2199,6 +2287,35 @@ function wizardValidateAndAdvance(dir){
     if (canSel.length !== canNeed){ wizardSetError(`Choose exactly ${canNeed} cantrip${canNeed===1?"":"s"}.`); return; }
     if (spSel.length !== spNeed){ wizardSetError(`Choose exactly ${spNeed} spell${spNeed===1?"":"s"}.`); return; }
 
+// Eldritch Knight / Arcane Trickster school restrictions (PHB 2014)
+const cn = LEVELUP_WIZ.className;
+const sn = LEVELUP_WIZ.subclassName || "";
+const toLv = Number(LEVELUP_WIZ.toLevel);
+const anySchoolLevels = new Set([8, 14, 20]);
+
+const schoolRule = (() => {
+  if (cn === "Fighter" && sn === "Eldritch Knight") return { schools: new Set(["abjuration","evocation"]), label: "Abjuration or Evocation" };
+  if (cn === "Rogue" && sn === "Arcane Trickster") return { schools: new Set(["enchantment","illusion"]), label: "Enchantment or Illusion" };
+  return null;
+})();
+
+let requiredSchoolCount = 0;
+if (schoolRule && spNeed > 0){
+  if (anySchoolLevels.has(toLv)) requiredSchoolCount = 0;
+  else if (toLv === 3) requiredSchoolCount = Math.min(2, spNeed);
+  else requiredSchoolCount = spNeed;
+}
+
+if (schoolRule && spNeed > 0 && requiredSchoolCount > 0){
+  const byId = new Map((DATA.spells?.spells || []).map(s => [s.id, s]));
+  const restrictedCount = spSel.filter(id => schoolRule.schools.has(String(byId.get(id)?.school || "").toLowerCase())).length;
+  if (restrictedCount < requiredSchoolCount){
+    wizardSetError(`School restriction: choose at least ${requiredSchoolCount} ${schoolRule.label} spell${requiredSchoolCount===1?"":"s"} this level.`);
+    return;
+  }
+}
+
+
     // Validate replacement
     if (LEVELUP_WIZ.spells.doReplace){
       if (!LEVELUP_WIZ.spells.replaceFromId || !LEVELUP_WIZ.spells.replaceToId){
@@ -2224,6 +2341,15 @@ function wizardValidateAndAdvance(dir){
         wizardSetError("Do not pick the replacement spell as a learned spell in the same level.");
         return;
       }
+
+if (schoolRule && !anySchoolLevels.has(toLv)){
+  const byId = new Map((DATA.spells?.spells || []).map(s => [s.id, s]));
+  const school = String(byId.get(LEVELUP_WIZ.spells.replaceToId)?.school || "").toLowerCase();
+  if (!schoolRule.schools.has(school)){
+    wizardSetError(`School restriction: replacement spell must be ${schoolRule.label} at this class level.`);
+    return;
+  }
+}
     }
 
     LEVELUP_WIZ.step++;
@@ -2538,6 +2664,7 @@ function save(){
 
   state = syncClassFeatures(state, DATA.classFeatures);
   state = saveCharacterState(state);
+  notifyCombatFrame();
 }
 
 // ---------------------------- Utilities ----------------------------
@@ -2559,6 +2686,30 @@ function cryptoId(){
 // ---------------------------- Boot ----------------------------
 async function boot(){
   initTabs();
+
+  // Combat tracker iframe integration
+  const cf = $("combatFrame");
+  if (cf) {
+    cf.addEventListener("load", () => notifyCombatFrame());
+  }
+
+  window.addEventListener("message", (e) => {
+    if (!e || !e.data || typeof e.data.type !== "string") return;
+    if (e.data.type === "COMBAT_UPDATED") {
+      // Combat tab wrote to shared character storage, reload and re-render.
+      try {
+        state = loadCharacterState();
+        state = syncClassFeatures(state, DATA.classFeatures);
+        state.equipment = state.equipment || defaultEquipment();
+        state.rest = state.rest || { preparedUnlock:0, hitDice:null };
+        state.rest.hitDice = state.rest.hitDice || defaultHitDicePools(state);
+        rerender();
+      } catch {}
+    }
+    if (e.data.type === "COMBAT_READY") {
+      notifyCombatFrame();
+    }
+  });
   await loadAllData();
   renderDataStatus();
   initSelectOptions();
@@ -2640,3 +2791,43 @@ boot().catch(err => {
   console.error(err);
   document.body.innerHTML = `<pre style="white-space:pre-wrap;color:#fff;padding:16px;">Boot error: ${String(err?.stack || err)}</pre>`;
 });
+function loadCombatTrackerState(){
+  try{
+    const raw = localStorage.getItem(COMBAT_TRACKER_STORAGE_KEY);
+    if (!raw) return null;
+    const obj = JSON.parse(raw);
+    return (obj && typeof obj === "object") ? obj : null;
+  }catch{ return null; }
+}
+
+function saveCombatTrackerState(obj){
+  try{
+    localStorage.setItem(COMBAT_TRACKER_STORAGE_KEY, JSON.stringify(obj));
+  }catch{}
+}
+
+function clearCombatTrackerState(){
+  try{ localStorage.removeItem(COMBAT_TRACKER_STORAGE_KEY); }catch{}
+}
+
+function notifyCombatFrame(){
+  const frame = $("combatFrame");
+  if (!frame || !frame.contentWindow) return;
+  try{
+    frame.contentWindow.postMessage({ type:"CHAR_SHEET_UPDATED", at: Date.now() }, "*");
+  }catch{}
+}
+
+
+
+
+function registerServiceWorker(){
+  try{
+    if (!('serviceWorker' in navigator)) return;
+    window.addEventListener('load', () => {
+      navigator.serviceWorker.register('./sw.js').catch(()=>{});
+    });
+  }catch{}
+}
+
+registerServiceWorker();

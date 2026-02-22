@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64" role="img" aria-label="R">
+  <path d="M32 10 L54 52 L10 52 Z" fill="#1f2a40" stroke="#6aa5ff" stroke-width="4" />
+  <text x="32" y="39" text-anchor="middle" font-family="system-ui,Segoe UI,Arial" font-size="22" fill="#e8ecf4" font-weight="700">R</text>
+  
+</svg>

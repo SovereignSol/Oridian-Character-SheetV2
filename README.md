@@ -87,3 +87,29 @@ The sheet can auto-grant class features and guide you through "choice points" (s
 These are applied with stable keys into `state.features` (source `class-primary` / `class-secondary`). Choices are stored in `state.classChoices`.
 
 You can extend this file to include more per-level grants and structured effects.
+
+
+## Combat tracker tab
+
+This build includes an integrated **Combat** tab (iframe) based on `combat.html`.
+
+- Tracks HP, temp HP, AC, action economy, spell slots (standard and Pact Magic), and supports multiclass slot pooling.
+- Syncs key values (HP and slot usage) with the main character sheet via shared localStorage plus postMessage events.
+
+## Offline-first PWA
+
+A basic Progressive Web App setup is included:
+
+- `manifest.webmanifest`
+- `sw.js` service worker that caches app assets for offline use
+- App icons in `Icons/`
+
+Service workers require serving over HTTP(S) (for local testing, use `python -m http.server`).
+
+## Level-up wizard
+
+The level-up wizard:
+
+- Prompts you to roll Hit Die on level-up (with Roll and Average buttons).
+- Guides ASI vs Feat choices.
+- Guides spell learning (including the PHB 2014 Eldritch Knight and Arcane Trickster school rules).

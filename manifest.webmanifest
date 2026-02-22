@@ -1,0 +1,22 @@
+{
+  "name": "D&D Dynamic Sheet",
+  "short_name": "DND Sheet",
+  "description": "Offline-capable D&D 5e (2014) character sheet with integrated combat tracker.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0d10",
+  "theme_color": "#0b0d10",
+  "icons": [
+    {
+      "src": "./Icons/app-icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "./Icons/app-icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

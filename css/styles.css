@@ -354,3 +354,18 @@ dialog.modal::backdrop{
 }
 .kv:last-child{ border-bottom: none; }
 
+
+
+/* Combat tab */
+.combatFrame{
+  width: 100%;
+  height: min(78vh, 920px);
+  min-height: 640px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: #0b0d10;
+}
+
+@media (max-width: 520px){
+  .combatFrame{ min-height: 560px; }
+}
