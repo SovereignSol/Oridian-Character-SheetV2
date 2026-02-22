@@ -1,0 +1,54 @@
+[
+  {
+    "name": "Barbarian",
+    "isSpellcaster": false
+  },
+  {
+    "name": "Bard",
+    "isSpellcaster": true
+  },
+  {
+    "name": "Cleric",
+    "isSpellcaster": true
+  },
+  {
+    "name": "Druid",
+    "isSpellcaster": true
+  },
+  {
+    "name": "Fighter",
+    "isSpellcaster": true
+  },
+  {
+    "name": "Monk",
+    "isSpellcaster": false
+  },
+  {
+    "name": "Paladin",
+    "isSpellcaster": true
+  },
+  {
+    "name": "Ranger",
+    "isSpellcaster": true
+  },
+  {
+    "name": "Rogue",
+    "isSpellcaster": true
+  },
+  {
+    "name": "Sorcerer",
+    "isSpellcaster": true
+  },
+  {
+    "name": "Warlock",
+    "isSpellcaster": true
+  },
+  {
+    "name": "Wizard",
+    "isSpellcaster": true
+  },
+  {
+    "name": "Artificer",
+    "isSpellcaster": true
+  }
+]

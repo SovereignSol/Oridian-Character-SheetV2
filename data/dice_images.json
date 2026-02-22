@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "classToImage": {
+    "Barbarian": "",
+    "Fighter": "",
+    "Paladin": "",
+    "Ranger": "",
+    "Bard": "",
+    "Cleric": "",
+    "Druid": "",
+    "Monk": "",
+    "Rogue": "",
+    "Warlock": "",
+    "Sorcerer": "",
+    "Wizard": "",
+    "Artificer": ""
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "backgrounds": [
+    {
+      "id": "acolyte",
+      "name": "Acolyte",
+      "skills": [
+        "insight",
+        "religion"
+      ],
+      "tools": [],
+      "languages": [
+        "any",
+        "any"
+      ],
+      "feature": {
+        "name": "Shelter of the Faithful",
+        "text": "You and your adventuring companions can expect free healing and care at a temple, shrine, or other established presence of your faith, though you must provide any material components needed for spells."
+      }
+    }
+  ]
+}

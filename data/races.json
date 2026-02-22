@@ -1,0 +1,161 @@
+{
+  "version": 1,
+  "races": [
+    {
+      "id": "human",
+      "name": "Human",
+      "abilityBonuses": {
+        "STR": 1,
+        "DEX": 1,
+        "CON": 1,
+        "INT": 1,
+        "WIS": 1,
+        "CHA": 1
+      },
+      "speed": 30,
+      "skills": [],
+      "tools": [],
+      "languages": [
+        "Common",
+        "Any"
+      ],
+      "traits": [
+        {
+          "name": "Versatile",
+          "text": "You gain +1 to all ability scores. Choose one extra language."
+        }
+      ]
+    },
+    {
+      "id": "elf_high",
+      "name": "Elf (High)",
+      "abilityBonuses": {
+        "DEX": 2,
+        "INT": 1
+      },
+      "speed": 30,
+      "skills": [],
+      "tools": [],
+      "languages": [
+        "Common",
+        "Elvish"
+      ],
+      "traits": [
+        {
+          "name": "Darkvision",
+          "text": "See in dim light within 60 ft as if it were bright, and in darkness as if it were dim."
+        },
+        {
+          "name": "Keen Senses",
+          "text": "Proficiency in Perception."
+        },
+        {
+          "name": "Fey Ancestry",
+          "text": "Advantage on saves against being charmed, and magic cannot put you to sleep."
+        },
+        {
+          "name": "Trance",
+          "text": "You do not need to sleep. You meditate deeply for 4 hours to gain benefits of a long rest."
+        }
+      ],
+      "effects": [
+        {
+          "type": "skillProficiency",
+          "skillId": "perception",
+          "level": 1
+        }
+      ]
+    },
+    {
+      "id": "dwarf_hill",
+      "name": "Dwarf (Hill)",
+      "abilityBonuses": {
+        "CON": 2,
+        "WIS": 1
+      },
+      "speed": 25,
+      "skills": [],
+      "tools": [],
+      "languages": [
+        "Common",
+        "Dwarvish"
+      ],
+      "traits": [
+        {
+          "name": "Darkvision",
+          "text": "See in dim light within 60 ft as if it were bright, and in darkness as if it were dim."
+        },
+        {
+          "name": "Dwarven Resilience",
+          "text": "Advantage on saves against poison, and resistance to poison damage."
+        },
+        {
+          "name": "Dwarven Toughness",
+          "text": "Your hit point maximum increases by 1, and increases by 1 each level."
+        }
+      ]
+    },
+    {
+      "id": "halfling_lightfoot",
+      "name": "Halfling (Lightfoot)",
+      "abilityBonuses": {
+        "DEX": 2,
+        "CHA": 1
+      },
+      "speed": 25,
+      "skills": [],
+      "tools": [],
+      "languages": [
+        "Common",
+        "Halfling"
+      ],
+      "traits": [
+        {
+          "name": "Lucky",
+          "text": "When you roll a 1 on a d20 for an attack, ability check, or save, you can reroll the die."
+        },
+        {
+          "name": "Brave",
+          "text": "Advantage on saves against being frightened."
+        },
+        {
+          "name": "Halfling Nimbleness",
+          "text": "You can move through the space of any creature that is a size larger than you."
+        },
+        {
+          "name": "Naturally Stealthy",
+          "text": "You can attempt to hide even when obscured only by a creature at least one size larger than you."
+        }
+      ]
+    },
+    {
+      "id": "tiefling",
+      "name": "Tiefling",
+      "abilityBonuses": {
+        "INT": 1,
+        "CHA": 2
+      },
+      "speed": 30,
+      "skills": [],
+      "tools": [],
+      "languages": [
+        "Common",
+        "Infernal"
+      ],
+      "traits": [
+        {
+          "name": "Darkvision",
+          "text": "See in dim light within 60 ft as if it were bright, and in darkness as if it were dim."
+        },
+        {
+          "name": "Hellish Resistance",
+          "text": "Resistance to fire damage."
+        },
+        {
+          "name": "Infernal Legacy",
+          "text": "You know thaumaturgy. You can cast hellish rebuke (1/day) and darkness (1/day) at higher levels."
+        }
+      ]
+    }
+  ]
+}

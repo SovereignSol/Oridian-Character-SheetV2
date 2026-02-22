@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Dynamic D&amp;D Character Sheet</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <header class="app-header">
+    <div class="app-title">
+      <h1>Dynamic D&amp;D Character Sheet</h1>
+      <p class="muted">Single-page, local-first, GitHub Pages friendly.</p>
+    </div>
+
+    <nav class="tabs" aria-label="Sections">
+      <button class="tab" data-tab="sheet" aria-selected="true">Sheet</button>
+      <button class="tab" data-tab="spells">Spells</button>
+      <button class="tab" data-tab="levelup">Level Up</button>
+      <button class="tab" data-tab="equipment">Equipment</button>
+      <button class="tab" data-tab="rest">Rest</button>
+      <button class="tab" data-tab="export">Import/Export</button>
+      <button class="tab" data-tab="settings">Settings</button>
+    </nav>
+  </header>
+
+  <main class="app-main">
+    <!-- SHEET -->
+    <section id="tab-sheet" class="tab-panel" data-tab="sheet">
+      <div class="grid two">
+        <div class="card">
+          <h2>Identity</h2>
+          <div class="grid two">
+            <label class="field">
+              <span>Name</span>
+              <input id="name" type="text" placeholder="Character name" />
+            </label>
+            <label class="field">
+              <span>Alignment</span>
+              <input id="alignment" type="text" placeholder="Alignment" />
+            </label>
+          </div>
+          <div class="grid two">
+            <label class="field">
+              <span>Race</span>
+              <select id="raceSelect"></select>
+            </label>
+            <label class="field">
+              <span>Background</span>
+              <select id="backgroundSelect"></select>
+            </label>
+          </div>
+          <div class="grid two">
+            <label class="field">
+              <span>Primary class</span>
+              <select id="primaryClass"></select>
+            </label>
+            <label class="field">
+              <span>Primary level</span>
+              <input id="primaryLevel" type="number" min="0" max="20" />
+            </label>
+          </div>
+          <div class="grid two">
+            <label class="field">
+              <span>Subclass</span>
+              <select id="primarySubclass"></select>
+            </label>
+            <div class="field">
+              <span>Saving throws (from 1st class)</span>
+              <div id="saveProfSummary" class="small muted"></div>
+              <button id="applyClassSaves" type="button" class="btn">Apply 1st-class saving throws</button>
+            </div>
+          </div>
+
+          <details class="mt">
+            <summary>Multiclass</summary>
+            <div class="grid two">
+              <label class="field">
+                <span>Enable multiclass</span>
+                <input id="multiclass" type="checkbox" />
+              </label>
+              <div></div>
+            </div>
+            <div class="grid two">
+              <label class="field">
+                <span>Secondary class</span>
+                <select id="secondaryClass"></select>
+              </label>
+              <label class="field">
+                <span>Secondary level</span>
+                <input id="secondaryLevel" type="number" min="0" max="20" />
+              </label>
+            </div>
+            <div class="grid two">
+              <label class="field">
+                <span>Secondary subclass</span>
+                <select id="secondarySubclass"></select>
+              </label>
+              <div class="field">
+                <span>Note</span>
+                <div class="small muted">In 5e, saving throw proficiencies come from your 1st class only.</div>
+              </div>
+            </div>
+          </details>
+        </div>
+
+        <div class="card">
+          <h2>Core numbers</h2>
+          <div class="grid three">
+            <div class="stat">
+              <div class="stat-label">Total level</div>
+              <div class="stat-value" id="totalLevel">1</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Proficiency bonus</div>
+              <div class="stat-value" id="pb">+2</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Passive Perception</div>
+              <div class="stat-value" id="passivePerception">10</div>
+            </div>
+          </div>
+
+          <div class="grid three mt">
+            <label class="field">
+              <span>Initiative misc</span>
+              <input id="initiativeMisc" type="number" min="-99" max="99" />
+            </label>
+            <label class="field">
+              <span>Perception misc</span>
+              <input id="perceptionMisc" type="number" min="-50" max="50" />
+            </label>
+            <label class="field">
+              <span>Inspiration</span>
+              <input id="inspirationPoints" type="number" min="0" max="99" />
+            </label>
+          </div>
+
+          <div class="grid three mt">
+            <div class="stat">
+              <div class="stat-label">Initiative</div>
+              <div class="stat-value" id="initiative">+0</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Spell DC</div>
+              <div class="stat-value" id="spellDc">8</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Spell attack</div>
+              <div class="stat-value" id="spellAtk">+0</div>
+            </div>
+          </div>
+
+          <details class="mt">
+            <summary>Spellcasting ability modifiers</summary>
+            <div class="grid two">
+              <label class="field">
+                <span>Primary spell ability mod</span>
+                <input id="primarySpellMod" type="number" min="-5" max="15" />
+              </label>
+              <label class="field">
+                <span>Secondary spell ability mod</span>
+                <input id="secondarySpellMod" type="number" min="-5" max="15" />
+              </label>
+            </div>
+            <div class="small muted">These are the ability modifiers (not the scores), e.g. INT 16 means +3.</div>
+          </details>
+        </div>
+      </div>
+
+      <div class="grid two mt">
+        <div class="card">
+          <h2>Abilities</h2>
+          <div id="abilitiesGrid" class="abilities-grid"></div>
+          <div class="small muted mt">Ability modifiers and derived bonuses update automatically.</div>
+        </div>
+
+        <div class="card">
+          <h2>Combat</h2>
+          <div class="grid three">
+            <label class="field">
+              <span>HP max</span>
+              <input id="hpMax" type="number" min="0" max="9999" />
+            </label>
+            <label class="field">
+              <span>HP now</span>
+              <input id="hpNow" type="number" min="0" max="9999" />
+            </label>
+            <label class="field">
+              <span>Temp HP</span>
+              <input id="hpTemp" type="number" min="0" max="9999" />
+            </label>
+          </div>
+
+          <div class="grid three mt">
+            <label class="field">
+              <span>AC base</span>
+              <input id="acBase" type="number" min="0" max="99" />
+            </label>
+            <label class="field">
+              <span>AC extra</span>
+              <input id="acExtra" type="number" min="-20" max="20" />
+            </label>
+            <div class="stat">
+              <div class="stat-label">AC total</div>
+              <div class="stat-value" id="acTotal">10</div>
+            </div>
+          </div>
+
+          <div class="grid three mt">
+            <label class="field">
+              <span>Speed</span>
+              <input id="speed" type="number" min="0" max="999" />
+            </label>
+            <label class="field">
+              <span>Weapon dice</span>
+              <input id="weaponDice" type="text" placeholder="e.g. 1d8+3" />
+            </label>
+            <div class="stat">
+              <div class="stat-label">Hit die</div>
+              <div class="stat-value" id="hitDie">d8</div>
+            </div>
+          </div>
+
+          <div class="grid two mt">
+            <button id="applyRecommendedHp" type="button" class="btn">Set HP max to recommended average</button>
+            <button id="healToFull" type="button" class="btn">Heal to full (HP now = max)</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid two mt">
+        <div class="card">
+          <h2>Saving throws</h2>
+          <div id="savesGrid" class="saves-grid"></div>
+          <div class="small muted mt">Toggle proficiency, bonus is ability mod + proficiency bonus if proficient.</div>
+        </div>
+
+        <div class="card">
+          <h2>Skills</h2>
+          <div id="skillsTable" class="skills-table"></div>
+          <div class="small muted mt">0 = none, 1 = proficient, 2 = expertise.</div>
+        </div>
+      </div>
+
+      <div class="grid two mt">
+        <div class="card">
+          <h2>Proficiencies</h2>
+          <div class="grid two">
+            <div>
+              <h3>Tools</h3>
+              <div id="toolsList" class="pill-list"></div>
+              <div class="grid two mt">
+                <input id="toolAdd" type="text" placeholder="Add tool proficiency" />
+                <button id="toolAddBtn" class="btn" type="button">Add</button>
+              </div>
+            </div>
+            <div>
+              <h3>Languages</h3>
+              <div id="langsList" class="pill-list"></div>
+              <div class="grid two mt">
+                <input id="langAdd" type="text" placeholder="Add language" />
+                <button id="langAddBtn" class="btn" type="button">Add</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Features</h2>
+          <div id="featuresList" class="feature-list"></div>
+          <details class="mt">
+            <summary>Add custom feature</summary>
+            <div class="grid two mt">
+              <input id="featureName" type="text" placeholder="Feature name" />
+              <button id="featureAddBtn" class="btn" type="button">Add</button>
+            </div>
+            <textarea id="featureText" class="mt" rows="4" placeholder="Feature text"></textarea>
+          </details>
+        </div>
+      </div>
+
+      <div class="card mt">
+        <h2>Notes</h2>
+        <textarea id="notes" rows="6" placeholder="Anything you want to track."></textarea>
+      </div>
+    </section>
+
+    <!-- SPELLS -->
+    <section id="tab-spells" class="tab-panel hidden" data-tab="spells">
+      <div class="grid two">
+        <div class="card">
+          <h2>Spell slots</h2>
+          <div id="slotsTable"></div>
+          <div class="small muted mt">Track expended slots. Long rest resets Spellcasting slots, short rest resets Pact Magic.</div>
+        </div>
+
+        <div class="card">
+          <h2>Spell limits</h2>
+          <div id="spellLimits"></div>
+          <div class="small muted mt">Prepared limits depend on the spell ability modifiers in the Sheet tab.</div>
+        </div>
+      </div>
+
+      <div class="card mt">
+        <h2>Spellbook, Known, Prepared</h2>
+
+        <div class="grid two">
+          <label class="field">
+            <span>Search</span>
+            <input id="spellSearch" type="text" placeholder="Type to filter spells by name" />
+          </label>
+          <label class="field">
+            <span>Level filter</span>
+            <select id="spellLevelFilter">
+              <option value="all">All levels</option>
+              <option value="0">Cantrips</option>
+              <option value="1">1st</option>
+              <option value="2">2nd</option>
+              <option value="3">3rd</option>
+              <option value="4">4th</option>
+              <option value="5">5th</option>
+              <option value="6">6th</option>
+              <option value="7">7th</option>
+              <option value="8">8th</option>
+              <option value="9">9th</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="small muted mt" id="spellModeHint"></div>
+
+        <div id="spellsByLevel"></div>
+
+        <details class="mt">
+          <summary>Spell notes</summary>
+          <textarea id="spellNotes" rows="5" placeholder="Spell notes (components, prepared rotation, scrolls, etc.)"></textarea>
+        </details>
+      </div>
+    </section>
+
+    <!-- LEVEL UP -->
+    <section id="tab-levelup" class="tab-panel hidden" data-tab="levelup">
+      <div class="grid two">
+        <div class="card">
+          <h2>Level Up Wizard</h2>
+          <p class="muted small">
+            This is a helper. It updates levels, calculates new pick slots (ASI/feats),
+            and sets spell learn/prep limits from the rules data you provided.
+          </p>
+
+          <div class="grid two">
+            <label class="field">
+              <span>Level up</span>
+              <select id="levelUpWhich">
+                <option value="primary">Primary class</option>
+                <option value="secondary">Secondary class</option>
+              </select>
+            </label>
+            <button id="levelUpBtn" type="button" class="btn">Increase by 1</button>
+          </div>
+
+          <details class="mt">
+            <summary>Picks (ASI/Feats)</summary>
+            <div class="small muted mt">Slots = 1 at overall level 1 + ASI levels for your classes (per progression.js).</div>
+            <div id="picksSummary" class="mt"></div>
+            <div id="picksEditor" class="mt"></div>
+          </details>
+
+          <details class="mt">
+            <summary>Quick ASI</summary>
+            <div class="grid three mt">
+              <label class="field"><span>Ability</span>
+                <select id="asiAbility">
+                  <option value="STR">STR</option>
+                  <option value="DEX">DEX</option>
+                  <option value="CON">CON</option>
+                  <option value="INT">INT</option>
+                  <option value="WIS">WIS</option>
+                  <option value="CHA">CHA</option>
+                </select>
+              </label>
+              <label class="field"><span>Increase</span>
+                <select id="asiAmount">
+                  <option value="1">+1</option>
+                  <option value="2">+2</option>
+                </select>
+              </label>
+              <button id="asiApplyBtn" class="btn" type="button">Apply ASI</button>
+            </div>
+            <div class="small muted mt">
+              This directly changes your ability score. Use Undo (below) if you apply the wrong ASI.
+            </div>
+            <div class="grid two mt">
+              <button id="asiUndoBtn" class="btn" type="button">Undo last ASI</button>
+              <div></div>
+            </div>
+          </details>
+        </div>
+
+        <div class="card">
+          <h2>Feats</h2>
+          <p class="muted small">Select feats to track. Some feats are informational (no automation), because the feat data you supplied is mostly descriptive text.</p>
+          <div class="grid two">
+            <label class="field">
+              <span>Search feats</span>
+              <input id="featSearch" type="text" placeholder="Filter by name" />
+            </label>
+            <label class="field">
+              <span>Show</span>
+              <select id="featFilter">
+                <option value="all">All feats</option>
+                <option value="picked">Picked only</option>
+                <option value="available">Not picked</option>
+              </select>
+            </label>
+          </div>
+          <div id="featsList" class="mt"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EQUIPMENT -->
+    <section id="tab-equipment" class="tab-panel hidden" data-tab="equipment">
+      <div class="grid two">
+        <div class="card">
+          <h2>Equipment (BG3-style slots)</h2>
+          <div class="small muted">Each item can optionally add AC bonus, weapons can set hit dice. Mark one weapon as equipped.</div>
+          <div id="equipmentSlots" class="mt"></div>
+        </div>
+
+        <div class="card">
+          <h2>Inventory</h2>
+          <div class="grid two">
+            <input id="bagItemName" type="text" placeholder="Item name" />
+            <button id="bagAddBtn" type="button" class="btn">Add</button>
+          </div>
+          <div id="bagList" class="mt"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- REST -->
+    <section id="tab-rest" class="tab-panel hidden" data-tab="rest">
+      <div class="grid two">
+        <div class="card">
+          <h2>Short Rest</h2>
+          <div class="small muted">Spend hit dice to heal (roll or average). Pact Magic slots reset on short rest.</div>
+          <div id="hitDicePools" class="mt"></div>
+          <div class="grid three mt">
+            <label class="field">
+              <span>Mode</span>
+              <select id="shortRestMode">
+                <option value="roll">Roll</option>
+                <option value="average">Average</option>
+              </select>
+            </label>
+            <div></div>
+            <button id="shortRestBtn" class="btn" type="button">Apply Short Rest</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>Long Rest</h2>
+          <div class="small muted">Restores HP to full, resets hit dice pools, and resets Spellcasting and Pact Magic slots usage.</div>
+          <button id="longRestBtn" class="btn" type="button">Apply Long Rest</button>
+
+          <h3 class="mt">Custom resources</h3>
+          <div class="small muted">Track anything (Ki, Rage, Inspiration dice, etc.). You control resets.</div>
+
+          <div class="grid two mt">
+            <input id="resourceName" type="text" placeholder="Resource name (e.g. Ki)" />
+            <button id="resourceAddBtn" class="btn" type="button">Add resource</button>
+          </div>
+          <div id="resourcesList" class="mt"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EXPORT -->
+    <section id="tab-export" class="tab-panel hidden" data-tab="export">
+      <div class="grid two">
+        <div class="card">
+          <h2>Export</h2>
+          <p class="muted small">Export your current character state as JSON (for backups or sharing).</p>
+          <button id="exportBtn" class="btn" type="button">Generate export</button>
+          <textarea id="exportBox" class="mt" rows="16" placeholder="Export will appear here"></textarea>
+        </div>
+
+        <div class="card">
+          <h2>Import</h2>
+          <p class="muted small">Paste a previously exported JSON blob here.</p>
+          <textarea id="importBox" class="mt" rows="16" placeholder="Paste JSON here"></textarea>
+          <div class="grid two mt">
+            <button id="importBtn" class="btn" type="button">Import</button>
+            <button id="resetBtn" class="btn danger" type="button">Factory reset</button>
+          </div>
+          <div id="importStatus" class="small mt"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SETTINGS -->
+    <section id="tab-settings" class="tab-panel hidden" data-tab="settings">
+      <div class="grid two">
+        <div class="card">
+          <h2>Cloud sync (optional)</h2>
+          <p class="muted small">
+            Uses Supabase anonymous auth and a single <code>characters</code> table keyed by (user_id, character_id).
+            If <code>js/config.js</code> is blank, these buttons are disabled.
+          </p>
+          <div class="grid two">
+            <button id="cloudSaveBtn" class="btn" type="button">Save to cloud</button>
+            <button id="cloudLoadBtn" class="btn" type="button">Load from cloud</button>
+          </div>
+          <div id="cloudStatus" class="small mt"></div>
+        </div>
+
+        <div class="card">
+          <h2>Data version</h2>
+          <div class="small muted" id="dataStatus"></div>
+
+          <h3 class="mt">Developer utilities</h3>
+          <button id="recomputeAllBtn" class="btn" type="button">Recompute derived fields</button>
+          <div class="small muted mt">
+            Mostly useful if you edit JSON data files and want a quick refresh.
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="app-footer">
+    <div class="small muted">
+      Local-first. Your character auto-saves to your browser (localStorage). Use Import/Export for backups.
+    </div>
+  </footer>
+
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
