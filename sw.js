@@ -1,7 +1,7 @@
 /* D&D Dynamic Sheet, Offline Cache (PWA)
-   Cache version: 2026-02-22b
+   Cache version: 2026-02-22c
 */
-const CACHE_NAME = "dnd-dynamic-sheet-2026-02-22b";
+const CACHE_NAME = "dnd-dynamic-sheet-2026-02-22c";
 const ASSETS = [
   "./",
   "./Icons/Action.svg",
@@ -67,12 +67,25 @@ self.addEventListener("fetch", (event) => {
   // Only handle same-origin requests.
   if (url.origin !== self.location.origin) return;
 
-  // Navigation requests: serve cached app shell first, then network.
+  // Navigation requests:
+  // - Prefer the exact requested document (e.g. battle.html) from cache.
+  // - Fall back to network.
+  // - If offline and not cached, fall back to index.html as a last resort.
+  // This avoids the bug where battle.html loads index.html (duplicate UI in the Battle tab).
   if (req.mode === "navigate") {
     event.respondWith(
-      caches.match("./index.html").then((cached) => {
+      caches.match(req).then((cached) => {
         if (cached) return cached;
-        return fetch(req).catch(() => cached);
+        return fetch(req)
+          .then((resp) => {
+            // Cache successful navigations so battle.html works offline.
+            if (resp && resp.status === 200 && resp.type === "basic") {
+              const copy = resp.clone();
+              caches.open(CACHE_NAME).then((cache) => cache.put(req, copy)).catch(() => {});
+            }
+            return resp;
+          })
+          .catch(() => caches.match("./index.html"));
       })
     );
     return;
