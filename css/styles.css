@@ -356,8 +356,8 @@ dialog.modal::backdrop{
 
 
 
-/* Combat tab */
-.combatFrame{
+/* Battle tab */
+.battleFrame{
   width: 100%;
   height: min(78vh, 920px);
   min-height: 640px;
@@ -367,5 +367,5 @@ dialog.modal::backdrop{
 }
 
 @media (max-width: 520px){
-  .combatFrame{ min-height: 560px; }
+  .battleFrame{ min-height: 560px; }
 }

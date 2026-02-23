@@ -89,12 +89,12 @@ These are applied with stable keys into `state.features` (source `class-primary`
 You can extend this file to include more per-level grants and structured effects.
 
 
-## Combat tracker tab
+## Battle tracker tab
 
-This build includes an integrated **Combat** tab (iframe) based on `combat.html`.
+This build includes an integrated **Battle** tab (iframe) based on `battle.html`.
 
 - Tracks HP, temp HP, AC, action economy, spell slots (standard and Pact Magic), and supports multiclass slot pooling.
-- Syncs key values (HP and slot usage) with the main character sheet via shared localStorage plus postMessage events.
+- Syncs key values (HP, AC, slot usage, spells list mirroring) with the main character sheet via shared localStorage plus postMessage events.
 
 ## Offline-first PWA
 

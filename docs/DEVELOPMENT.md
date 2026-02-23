@@ -2,7 +2,7 @@
 
 ## File structure
 - `index.html`: Main app shell and tabs.
-- `combat.html`: Combat tracker UI.
+- `battle.html`: Battle tracker UI.
 - `js/app.js`: Main UI logic and state management.
 - `js/engine/`: Rules engines (5e 2014), spell engines, etc.
 - `data/`: JSON datasets (classes, feats, spells, spellcasting progression).

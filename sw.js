@@ -1,7 +1,7 @@
 /* D&D Dynamic Sheet, Offline Cache (PWA)
-   Cache version: 2026-02-22
+   Cache version: 2026-02-22b
 */
-const CACHE_NAME = "dnd-dynamic-sheet-2026-02-22";
+const CACHE_NAME = "dnd-dynamic-sheet-2026-02-22b";
 const ASSETS = [
   "./",
   "./Icons/Action.svg",
@@ -12,7 +12,7 @@ const ASSETS = [
   "./Icons/Reaction_used.svg",
   "./Icons/app-icon-192.png",
   "./Icons/app-icon-512.png",
-  "./combat.html",
+  "./battle.html",
   "./css/styles.css",
   "./data/backgrounds.json",
   "./data/class_features.json",

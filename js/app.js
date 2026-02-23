@@ -23,9 +23,6 @@ import { allowedSpellIds, spellsByLevel, isPreparedCaster, isKnownCaster, always
 import { syncClassFeatures, listClassChoicesForState, setClassChoice } from "./engine/class_features.js";
 
 import { isCloudConfigured, cloudSave, cloudLoad } from "./engine/cloud.js";
-
-const COMBAT_TRACKER_STORAGE_KEY = "generic_tracker_state_v5_multiclass_pooled_packages";
-
 // ---------------------------- Data loading ----------------------------
 async function loadJson(path){
   const res = await fetch(path, { cache: "no-store" });
@@ -1385,8 +1382,6 @@ function initStaticBindings(){
   // Export / import
   $("exportBtn").addEventListener("click", () => {
     const out = (typeof structuredClone === "function") ? structuredClone(state) : JSON.parse(JSON.stringify(state));
-    const ct = loadCombatTrackerState();
-    if (ct) out._combatTracker = ct;
     $("exportBox").value = JSON.stringify(out, null, 2);
   });
   $("importBtn").addEventListener("click", () => {
@@ -1407,10 +1402,9 @@ function initStaticBindings(){
   $("resetBtn").addEventListener("click", () => {
     state = defaultCharacterState();
     state.equipment = defaultEquipment();
-    clearCombatTrackerState();
     save();
     rerender();
-    notifyCombatFrame();
+    notifyBattleFrame();
   });
 
   // Cloud
@@ -2664,7 +2658,7 @@ function save(){
 
   state = syncClassFeatures(state, DATA.classFeatures);
   state = saveCharacterState(state);
-  notifyCombatFrame();
+  notifyBattleFrame();
 }
 
 // ---------------------------- Utilities ----------------------------
@@ -2686,17 +2680,16 @@ function cryptoId(){
 // ---------------------------- Boot ----------------------------
 async function boot(){
   initTabs();
-
-  // Combat tracker iframe integration
-  const cf = $("combatFrame");
-  if (cf) {
-    cf.addEventListener("load", () => notifyCombatFrame());
+  // Battle tracker iframe integration
+  const bf = $("battleFrame");
+  if (bf) {
+    bf.addEventListener("load", () => notifyBattleFrame());
   }
 
   window.addEventListener("message", (e) => {
     if (!e || !e.data || typeof e.data.type !== "string") return;
-    if (e.data.type === "COMBAT_UPDATED") {
-      // Combat tab wrote to shared character storage, reload and re-render.
+    if (e.data.type === "BATTLE_UPDATED") {
+      // Battle tab wrote to shared character storage, reload and re-render.
       try {
         state = loadCharacterState();
         state = syncClassFeatures(state, DATA.classFeatures);
@@ -2706,8 +2699,8 @@ async function boot(){
         rerender();
       } catch {}
     }
-    if (e.data.type === "COMBAT_READY") {
-      notifyCombatFrame();
+    if (e.data.type === "BATTLE_READY") {
+      notifyBattleFrame();
     }
   });
   await loadAllData();
@@ -2791,33 +2784,13 @@ boot().catch(err => {
   console.error(err);
   document.body.innerHTML = `<pre style="white-space:pre-wrap;color:#fff;padding:16px;">Boot error: ${String(err?.stack || err)}</pre>`;
 });
-function loadCombatTrackerState(){
-  try{
-    const raw = localStorage.getItem(COMBAT_TRACKER_STORAGE_KEY);
-    if (!raw) return null;
-    const obj = JSON.parse(raw);
-    return (obj && typeof obj === "object") ? obj : null;
-  }catch{ return null; }
-}
-
-function saveCombatTrackerState(obj){
-  try{
-    localStorage.setItem(COMBAT_TRACKER_STORAGE_KEY, JSON.stringify(obj));
-  }catch{}
-}
-
-function clearCombatTrackerState(){
-  try{ localStorage.removeItem(COMBAT_TRACKER_STORAGE_KEY); }catch{}
-}
-
-function notifyCombatFrame(){
-  const frame = $("combatFrame");
+function notifyBattleFrame(){
+  const frame = $("battleFrame");
   if (!frame || !frame.contentWindow) return;
   try{
     frame.contentWindow.postMessage({ type:"CHAR_SHEET_UPDATED", at: Date.now() }, "*");
   }catch{}
 }
-
 
 
 

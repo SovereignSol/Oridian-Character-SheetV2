@@ -23,7 +23,7 @@
       <button class="tab" id="tabbtn-levelup" role="tab" data-tab="levelup" aria-controls="tab-levelup" aria-selected="false" tabindex="-1">Level Up</button>
       <button class="tab" id="tabbtn-equipment" role="tab" data-tab="equipment" aria-controls="tab-equipment" aria-selected="false" tabindex="-1">Equipment</button>
       <button class="tab" id="tabbtn-rest" role="tab" data-tab="rest" aria-controls="tab-rest" aria-selected="false" tabindex="-1">Rest</button>
-      <button class="tab" id="tabbtn-combat" role="tab" data-tab="combat" aria-controls="tab-combat" aria-selected="false" tabindex="-1">Combat</button>
+      <button class="tab" id="tabbtn-battle" role="tab" data-tab="battle" aria-controls="tab-battle" aria-selected="false" tabindex="-1">Battle</button>
       <button class="tab" id="tabbtn-export" role="tab" data-tab="export" aria-controls="tab-export" aria-selected="false" tabindex="-1">Import/Export</button>
       <button class="tab" id="tabbtn-settings" role="tab" data-tab="settings" aria-controls="tab-settings" aria-selected="false" tabindex="-1">Settings</button>
     </nav>
@@ -477,20 +477,21 @@
       </div>
     </section>
 
-    <!-- EXPORT -->
-    <section id="tab-combat" class="tab-panel hidden" data-tab="combat" role="tabpanel" aria-labelledby="tabbtn-combat" tabindex="0">
-  <div class="card">
-    <div class="row">
-      <h2>Combat</h2>
-      <div class="muted small">Player-focused combat tracker (action economy, HP, spell slots). Changes sync with your sheet.</div>
-    </div>
-    <iframe id="combatFrame" class="combatFrame" title="Combat Tracker" src="combat.html" loading="lazy"></iframe>
-    <div class="muted small mt">
-      If you are opening this directly from your file system and the tracker cannot load data, serve the folder with a local server or GitHub Pages.
-    </div>
-  </div>
-</section>
+    <!-- BATTLE -->
+    <section id="tab-battle" class="tab-panel hidden" data-tab="battle" role="tabpanel" aria-labelledby="tabbtn-battle" tabindex="0">
+      <div class="card">
+        <div class="row">
+          <h2>Battle</h2>
+          <div class="muted small">Battle tracker module (action economy, HP, spell slots, casting). Syncs with your character sheet both ways.</div>
+        </div>
+        <iframe id="battleFrame" class="battleFrame" title="Battle Tracker" src="battle.html" loading="lazy"></iframe>
+        <div class="muted small mt">
+          If you open this directly from your file system and data files cannot load, serve the folder with a local server or GitHub Pages.
+        </div>
+      </div>
+    </section>
 
+    <!-- EXPORT -->
     <section id="tab-export" class="tab-panel hidden" data-tab="export" role="tabpanel" aria-labelledby="tabbtn-export" tabindex="0">
       <div class="grid two">
         <div class="card">
